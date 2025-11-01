@@ -1,11 +1,13 @@
 package config
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
+	"github.com/aelpxy/nap/internal/utils"
 	"github.com/aelpxy/nap/pkg/models"
 )
 
@@ -61,15 +63,14 @@ func (cm *ConfigManager) Save() error {
 		return fmt.Errorf("failed to create .nap directory: %w", err)
 	}
 
-	f, err := os.Create(cm.configPath)
-	if err != nil {
-		return fmt.Errorf("failed to create config file: %w", err)
-	}
-	defer f.Close()
-
-	encoder := toml.NewEncoder(f)
+	var buf bytes.Buffer
+	encoder := toml.NewEncoder(&buf)
 	if err := encoder.Encode(cm.config); err != nil {
 		return fmt.Errorf("failed to encode config: %w", err)
+	}
+
+	if err := utils.AtomicWriteFile(cm.configPath, buf.Bytes(), 0644); err != nil {
+		return fmt.Errorf("failed to write config: %w", err)
 	}
 
 	return nil

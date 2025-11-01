@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+
+	"github.com/aelpxy/nap/internal/utils"
 )
 
 type BackupRegistry struct {
@@ -53,7 +55,7 @@ func (r *BackupRegistry) Save() error {
 		return fmt.Errorf("failed to marshal registry: %w", err)
 	}
 
-	if err := os.WriteFile(r.path, data, 0644); err != nil {
+	if err := utils.AtomicWriteFile(r.path, data, 0644); err != nil {
 		return fmt.Errorf("failed to write registry: %w", err)
 	}
 

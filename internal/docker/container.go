@@ -2,6 +2,7 @@ package docker
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -25,9 +26,12 @@ type PullProgress struct {
 }
 
 func (c *Client) PullImage(imageName string, progressWriter io.Writer) error {
-	reader, err := c.cli.ImagePull(c.ctx, imageName, image.PullOptions{})
+	ctx, cancel := context.WithTimeout(c.ctx, ImagePullTimeout)
+	defer cancel()
+
+	reader, err := c.cli.ImagePull(ctx, imageName, image.PullOptions{})
 	if err != nil {
-		return fmt.Errorf("failed to pull image: %w", err)
+		return fmt.Errorf("failed to pull image %s: %w", imageName, err)
 	}
 	defer reader.Close()
 
@@ -65,37 +69,49 @@ func (c *Client) PullImage(imageName string, progressWriter io.Writer) error {
 }
 
 func (c *Client) CreateContainer(config *container.Config, hostConfig *container.HostConfig, networkConfig *network.NetworkingConfig, containerName string) (string, error) {
-	resp, err := c.cli.ContainerCreate(c.ctx, config, hostConfig, networkConfig, nil, containerName)
+	ctx, cancel := context.WithTimeout(c.ctx, ContainerOpTimeout)
+	defer cancel()
+
+	resp, err := c.cli.ContainerCreate(ctx, config, hostConfig, networkConfig, nil, containerName)
 	if err != nil {
-		return "", fmt.Errorf("failed to create container: %w", err)
+		return "", fmt.Errorf("failed to create container %s: %w", containerName, err)
 	}
 
 	return resp.ID, nil
 }
 
 func (c *Client) StartContainer(containerID string) error {
-	err := c.cli.ContainerStart(c.ctx, containerID, container.StartOptions{})
+	ctx, cancel := context.WithTimeout(c.ctx, ContainerOpTimeout)
+	defer cancel()
+
+	err := c.cli.ContainerStart(ctx, containerID, container.StartOptions{})
 	if err != nil {
-		return fmt.Errorf("failed to start container: %w", err)
+		return fmt.Errorf("failed to start container %s: %w", containerID, err)
 	}
 
 	return nil
 }
 
 func (c *Client) StopContainer(containerID string) error {
+	ctx, cancel := context.WithTimeout(c.ctx, ContainerOpTimeout)
+	defer cancel()
+
 	timeout := 10
-	err := c.cli.ContainerStop(c.ctx, containerID, container.StopOptions{
+	err := c.cli.ContainerStop(ctx, containerID, container.StopOptions{
 		Timeout: &timeout,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to stop container: %w", err)
+		return fmt.Errorf("failed to stop container %s: %w", containerID, err)
 	}
 
 	return nil
 }
 
 func (c *Client) RemoveContainer(containerID string) error {
-	err := c.cli.ContainerRemove(c.ctx, containerID, container.RemoveOptions{
+	ctx, cancel := context.WithTimeout(c.ctx, ContainerOpTimeout)
+	defer cancel()
+
+	err := c.cli.ContainerRemove(ctx, containerID, container.RemoveOptions{
 		Force:         true,
 		RemoveVolumes: false,
 	})

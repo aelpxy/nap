@@ -6,6 +6,7 @@ import (
 
 	"github.com/aelpxy/nap/internal/database"
 	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/nap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -19,6 +20,19 @@ var vpcCreateCmd = &cobra.Command{
 
 func runVPCCreate(cmd *cobra.Command, args []string) {
 	vpcName := args[0]
+
+	if vpcName == "" || len(vpcName) == 0 {
+		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] vpc name is required"))
+		os.Exit(1)
+	}
+	if len(vpcName) > 64 {
+		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] vpc name: maximum 64 characters"))
+		os.Exit(1)
+	}
+	if !utils.IsValidName(vpcName) {
+		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] vpc name: use only lowercase letters, numbers, and dashes"))
+		os.Exit(1)
+	}
 
 	vpcRegistry, err := database.NewVPCRegistryManager()
 	if err != nil {

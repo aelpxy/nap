@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/aelpxy/nap/internal/utils"
 	"github.com/aelpxy/nap/pkg/models"
 )
 
@@ -90,7 +91,7 @@ func (r *RegistryManager) Write(registry *models.Registry) error {
 		return fmt.Errorf("failed to marshal registry: %w", err)
 	}
 
-	if err := os.WriteFile(r.path, data, 0644); err != nil {
+	if err := utils.AtomicWriteFile(r.path, data, 0644); err != nil {
 		return fmt.Errorf("failed to write registry: %w", err)
 	}
 

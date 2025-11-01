@@ -6,6 +6,7 @@ import (
 
 	"github.com/aelpxy/nap/internal/database"
 	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/nap/internal/utils"
 	"github.com/aelpxy/nap/pkg/models"
 	"github.com/spf13/cobra"
 )
@@ -29,6 +30,19 @@ func runCreate(cmd *cobra.Command, args []string) {
 
 	if dbType != "postgres" && dbType != "valkey" {
 		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] database type must be 'postgres' or 'valkey'"))
+		os.Exit(1)
+	}
+
+	if dbName == "" || len(dbName) == 0 {
+		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] database name is required"))
+		os.Exit(1)
+	}
+	if len(dbName) > 64 {
+		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] database name: maximum 64 characters"))
+		os.Exit(1)
+	}
+	if !utils.IsValidName(dbName) {
+		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] database name: use only lowercase letters, numbers, and dashes"))
 		os.Exit(1)
 	}
 

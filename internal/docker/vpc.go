@@ -1,6 +1,7 @@
 package docker
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -13,9 +14,12 @@ const (
 )
 
 func (c *Client) CreateVPC(vpcName string) (*models.VPC, error) {
+	ctx, cancel := context.WithTimeout(c.ctx, NetworkOpTimeout)
+	defer cancel()
+
 	networkName := vpcName + VPCNetworkSuffix
 
-	networks, err := c.cli.NetworkList(c.ctx, network.ListOptions{})
+	networks, err := c.cli.NetworkList(ctx, network.ListOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to list networks: %w", err)
 	}
@@ -31,7 +35,7 @@ func (c *Client) CreateVPC(vpcName string) (*models.VPC, error) {
 		return nil, fmt.Errorf("failed to allocate subnet: %w", err)
 	}
 
-	resp, err := c.cli.NetworkCreate(c.ctx, networkName, network.CreateOptions{
+	resp, err := c.cli.NetworkCreate(ctx, networkName, network.CreateOptions{
 		Driver: "bridge",
 		IPAM: &network.IPAM{
 			Config: []network.IPAMConfig{
@@ -63,9 +67,12 @@ func (c *Client) CreateVPC(vpcName string) (*models.VPC, error) {
 }
 
 func (c *Client) DeleteVPC(networkID string) error {
-	err := c.cli.NetworkRemove(c.ctx, networkID)
+	ctx, cancel := context.WithTimeout(c.ctx, NetworkOpTimeout)
+	defer cancel()
+
+	err := c.cli.NetworkRemove(ctx, networkID)
 	if err != nil {
-		return fmt.Errorf("failed to delete VPC network: %w", err)
+		return fmt.Errorf("failed to delete VPC network %s: %w", networkID, err)
 	}
 	return nil
 }
