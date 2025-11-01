@@ -1,8 +1,6 @@
 package database
 
 import (
-	"crypto/rand"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -11,6 +9,7 @@ import (
 
 	"github.com/aelpxy/nap/internal/utils"
 	"github.com/aelpxy/nap/pkg/models"
+	"github.com/lucsky/cuid"
 )
 
 const (
@@ -203,9 +202,5 @@ func (r *RegistryManager) List() ([]models.Database, error) {
 }
 
 func GenerateID(prefix string) string {
-	bytes := make([]byte, 8)
-	if _, err := rand.Read(bytes); err != nil {
-		return fmt.Sprintf("%s-%d", prefix, os.Getpid())
-	}
-	return fmt.Sprintf("%s-%s", prefix, hex.EncodeToString(bytes))
+	return fmt.Sprintf("%s-%s", prefix, cuid.New())
 }

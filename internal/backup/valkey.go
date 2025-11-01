@@ -87,11 +87,23 @@ func (m *Manager) backupValkey(db *models.Database, backupPath string, compress 
 	if err != nil {
 		return "", 0, fmt.Errorf("failed to create backup file: %w", err)
 	}
-	defer outFile.Close()
+
+	var writeErr error
+	defer func() {
+		if closeErr := outFile.Close(); closeErr != nil && writeErr == nil {
+			writeErr = closeErr
+		}
+	}()
 
 	written, err := io.Copy(outFile, reader)
 	if err != nil {
+		writeErr = err
 		return "", 0, fmt.Errorf("failed to write backup: %w", err)
+	}
+
+	if err := outFile.Close(); err != nil {
+		writeErr = err
+		return "", 0, fmt.Errorf("failed to close backup file: %w", err)
 	}
 
 	return version, written, nil

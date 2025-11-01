@@ -44,20 +44,28 @@ func AtomicWriteFile(filename string, data []byte, perm os.FileMode) error {
 	}
 	tmpName := tmpFile.Name()
 
+	var writeErr error
 	defer func() {
-		tmpFile.Close()
-		os.Remove(tmpName)
+		if closeErr := tmpFile.Close(); closeErr != nil && writeErr == nil {
+			writeErr = closeErr
+		}
+		if writeErr != nil {
+			os.Remove(tmpName)
+		}
 	}()
 
 	if _, err := tmpFile.Write(data); err != nil {
+		writeErr = err
 		return err
 	}
 
 	if err := tmpFile.Sync(); err != nil {
+		writeErr = err
 		return err
 	}
 
 	if err := tmpFile.Close(); err != nil {
+		writeErr = err
 		return err
 	}
 

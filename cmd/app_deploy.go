@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/aelpxy/nap/internal/app"
@@ -69,14 +68,9 @@ func runAppDeploy(cmd *cobra.Command, args []string) {
 		projectPath = args[1]
 	}
 
-	absPath, err := filepath.Abs(projectPath)
+	absPath, err := utils.ValidateProjectPath(projectPath)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s failed to resolve project path: %v\n", errorStyle.Render("[error]"), err)
-		os.Exit(1)
-	}
-
-	if _, err := os.Stat(absPath); os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, "%s project path does not exist: %s\n", errorStyle.Render("[error]"), absPath)
+		fmt.Fprintf(os.Stderr, "%s %v\n", errorStyle.Render("[error]"), err)
 		os.Exit(1)
 	}
 
@@ -347,11 +341,7 @@ func runAppDeploy(cmd *cobra.Command, args []string) {
 	var appID string
 
 	if !isRedeployment {
-		appID, err = app.GenerateID()
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s failed to generate id: %v\n", errorStyle.Render("[error]"), err)
-			os.Exit(1)
-		}
+		appID = app.GenerateID()
 
 		application = &models.Application{
 			ID:   appID,

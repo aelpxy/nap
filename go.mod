@@ -8,6 +8,7 @@ require (
 	github.com/containerd/errdefs v1.0.0
 	github.com/docker/docker v27.3.1+incompatible
 	github.com/docker/go-connections v0.6.0
+	github.com/lucsky/cuid v1.2.1
 	github.com/spf13/cobra v1.10.1
 )
 

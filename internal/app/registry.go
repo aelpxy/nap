@@ -1,8 +1,6 @@
 package app
 
 import (
-	"crypto/rand"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -11,6 +9,7 @@ import (
 
 	"github.com/aelpxy/nap/internal/utils"
 	"github.com/aelpxy/nap/pkg/models"
+	"github.com/lucsky/cuid"
 )
 
 const (
@@ -198,12 +197,8 @@ func (r *RegistryManager) Delete(name string) error {
 	return r.Write(registry)
 }
 
-func GenerateID() (string, error) {
-	bytes := make([]byte, 8)
-	if _, err := rand.Read(bytes); err != nil {
-		return "", err
-	}
-	return "app-" + hex.EncodeToString(bytes), nil
+func GenerateID() string {
+	return "app-" + cuid.New()
 }
 
 func (r *RegistryManager) Exists(name string) (bool, error) {

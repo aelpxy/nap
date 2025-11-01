@@ -83,7 +83,13 @@ func (m *Manager) backupPostgres(db *models.Database, backupPath string, compres
 	if err != nil {
 		return "", 0, fmt.Errorf("failed to create backup file: %w", err)
 	}
-	defer outFile.Close()
+
+	var writeErr error
+	defer func() {
+		if closeErr := outFile.Close(); closeErr != nil && writeErr == nil {
+			writeErr = closeErr
+		}
+	}()
 
 	var writer io.Writer = outFile
 	var gzWriter *gzip.Writer
@@ -91,22 +97,29 @@ func (m *Manager) backupPostgres(db *models.Database, backupPath string, compres
 	if compress {
 		gzWriter = gzip.NewWriter(outFile)
 		writer = gzWriter
-		defer gzWriter.Close()
 	}
 
 	var dumpBuf bytes.Buffer
 	if _, err := stdcopy.StdCopy(&dumpBuf, io.Discard, attachResp.Reader); err != nil {
+		writeErr = err
 		return "", 0, fmt.Errorf("failed to read dump: %w", err)
 	}
 
 	if _, err := io.Copy(writer, &dumpBuf); err != nil {
+		writeErr = err
 		return "", 0, fmt.Errorf("failed to write backup: %w", err)
 	}
 
 	if compress && gzWriter != nil {
 		if err := gzWriter.Close(); err != nil {
+			writeErr = err
 			return "", 0, fmt.Errorf("failed to close gzip writer: %w", err)
 		}
+	}
+
+	if err := outFile.Close(); err != nil {
+		writeErr = err
+		return "", 0, fmt.Errorf("failed to close backup file: %w", err)
 	}
 
 	fileInfo, err := os.Stat(backupFile)
