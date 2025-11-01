@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	"github.com/aelpxy/nap/internal/app"
+	"github.com/aelpxy/nap/internal/database"
+	"github.com/aelpxy/nap/internal/docker"
 	"github.com/spf13/cobra"
 )
 
@@ -99,7 +101,54 @@ func runAppEnvSet(cmd *cobra.Command, args []string) {
 		fmt.Println()
 		fmt.Println(progressStyle.Render("  --> restarting application..."))
 
-		fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'nap app restart %s' to apply changes", appName)))
+		dockerClient, err := docker.NewClient()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s failed to initialize: %v\n", errorStyle.Render("[error]"), err)
+			os.Exit(1)
+		}
+		defer dockerClient.Close()
+
+		vpcRegistry, err := database.NewVPCRegistryManager()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s failed to load vpc registry: %v\n", errorStyle.Render("[error]"), err)
+			os.Exit(1)
+		}
+		if err := vpcRegistry.Initialize(); err != nil {
+			fmt.Fprintf(os.Stderr, "%s failed to initialize vpc registry: %v\n", errorStyle.Render("[error]"), err)
+			os.Exit(1)
+		}
+
+		vpc, err := vpcRegistry.Get(application.VPC)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s failed to get vpc: %v\n", errorStyle.Render("[error]"), err)
+			os.Exit(1)
+		}
+
+		newContainerIDs := make([]string, 0, len(application.ContainerIDs))
+		for i, containerID := range application.ContainerIDs {
+			instanceNum := i + 1
+
+			newID, err := app.RecreateContainer(
+				dockerClient,
+				containerID,
+				application,
+				vpc.NetworkName,
+				instanceNum,
+			)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "%s failed to recreate instance: %v\n", errorStyle.Render("[error]"), err)
+				os.Exit(1)
+			}
+			newContainerIDs = append(newContainerIDs, newID)
+		}
+
+		application.ContainerIDs = newContainerIDs
+		if err := registry.Update(*application); err != nil {
+			fmt.Fprintf(os.Stderr, "%s failed to update registry: %v\n", errorStyle.Render("[error]"), err)
+			os.Exit(1)
+		}
+
+		fmt.Println(successStyle.Render("  [done] application restarted"))
 	} else {
 		fmt.Println()
 		fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'nap app restart %s' to apply changes", appName)))
