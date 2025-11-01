@@ -7,6 +7,7 @@ import (
 
 	"github.com/aelpxy/nap/internal/app"
 	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/nap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -132,7 +133,7 @@ func runAppVolumeBackup(cmd *cobra.Command, args []string) {
 	fmt.Println(progressStyle.Render("  backup details:"))
 	fmt.Printf("    id: %s\n", dimStyle.Render(backup.ID))
 	fmt.Printf("    file: %s\n", dimStyle.Render(backup.FilePath))
-	fmt.Printf("    size: %s\n", dimStyle.Render(formatBytes(backup.Size)))
+	fmt.Printf("    size: %s\n", dimStyle.Render(utils.FormatBytes(backup.Size)))
 	if backup.Description != "" {
 		fmt.Printf("    description: %s\n", dimStyle.Render(backup.Description))
 	}
@@ -185,7 +186,7 @@ func runAppVolumeRestore(cmd *cobra.Command, args []string) {
 	fmt.Println()
 	fmt.Println("  " + dimStyle.Render("backup file:"))
 	fmt.Printf("    path: %s\n", dimStyle.Render(backupFile))
-	fmt.Printf("    size: %s\n", dimStyle.Render(formatBytes(backupFileInfo.Size())))
+	fmt.Printf("    size: %s\n", dimStyle.Render(utils.FormatBytes(backupFileInfo.Size())))
 	fmt.Printf("    modified: %s\n", dimStyle.Render(backupFileInfo.ModTime().Format("2006-01-02 15:04:05")))
 	fmt.Println()
 	fmt.Println("  " + dimStyle.Render("target volume:"))
@@ -277,7 +278,7 @@ func runAppVolumeBackups(cmd *cobra.Command, args []string) {
 		fmt.Printf("  %s\n", successStyle.Render(backup.ID))
 		fmt.Printf("    app: %s\n", dimStyle.Render(backup.AppName))
 		fmt.Printf("    volume: %s\n", dimStyle.Render(backup.VolumeName))
-		fmt.Printf("    size: %s\n", dimStyle.Render(formatBytes(backup.Size)))
+		fmt.Printf("    size: %s\n", dimStyle.Render(utils.FormatBytes(backup.Size)))
 		if backup.Description != "" {
 			fmt.Printf("    description: %s\n", dimStyle.Render(backup.Description))
 		}
@@ -332,15 +333,3 @@ func runAppVolumeBackupDelete(cmd *cobra.Command, args []string) {
 	fmt.Println(successStyle.Render("  [done] backup deleted"))
 }
 
-func formatBytes(bytes int64) string {
-	const unit = 1024
-	if bytes < unit {
-		return fmt.Sprintf("%d B", bytes)
-	}
-	div, exp := int64(unit), 0
-	for n := bytes / unit; n >= unit; n /= unit {
-		div *= unit
-		exp++
-	}
-	return fmt.Sprintf("%.1f %cB", float64(bytes)/float64(div), "KMGTPE"[exp])
-}

@@ -9,7 +9,12 @@ import (
 	"github.com/aelpxy/nap/internal/app"
 	"github.com/aelpxy/nap/internal/database"
 	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/nap/internal/utils"
 	"github.com/spf13/cobra"
+)
+
+var (
+	envSetYes bool
 )
 
 var appEnvSetCmd = &cobra.Command{
@@ -21,6 +26,7 @@ var appEnvSetCmd = &cobra.Command{
 }
 
 func init() {
+	appEnvSetCmd.Flags().BoolVarP(&envSetYes, "yes", "y", false, "Automatically restart without confirmation")
 	appEnvCmd.AddCommand(appEnvSetCmd)
 }
 
@@ -72,7 +78,7 @@ func runAppEnvSet(cmd *cobra.Command, args []string) {
 
 	fmt.Println(progressStyle.Render(fmt.Sprintf("  --> setting %d variable(s)...", len(envVars))))
 	for key, value := range envVars {
-		maskedValue := maskSensitiveValue(key, value)
+		maskedValue := utils.MaskSensitiveEnvValue(key, value)
 		fmt.Printf("    %s = %s\n", dimStyle.Render(key), dimStyle.Render(maskedValue))
 		application.EnvVars[key] = value
 	}
@@ -86,18 +92,24 @@ func runAppEnvSet(cmd *cobra.Command, args []string) {
 	fmt.Println(successStyle.Render(fmt.Sprintf("  [done] set %d environment variable(s)", len(envVars))))
 	fmt.Println()
 
-	fmt.Println(infoStyle.Render("  [info] restart app to apply changes?"))
-	fmt.Print("  [Y/n]: ")
+	shouldRestart := envSetYes
 
-	reader := bufio.NewReader(os.Stdin)
-	response, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s failed to read input: %v\n", errorStyle.Render("[error]"), err)
-		os.Exit(1)
+	if !envSetYes {
+		fmt.Println(infoStyle.Render("  [info] restart app to apply changes?"))
+		fmt.Print("  [Y/n]: ")
+
+		reader := bufio.NewReader(os.Stdin)
+		response, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s failed to read input: %v\n", errorStyle.Render("[error]"), err)
+			os.Exit(1)
+		}
+
+		response = strings.ToLower(strings.TrimSpace(response))
+		shouldRestart = response == "" || response == "y" || response == "yes"
 	}
 
-	response = strings.ToLower(strings.TrimSpace(response))
-	if response == "" || response == "y" || response == "yes" {
+	if shouldRestart {
 		fmt.Println()
 		fmt.Println(progressStyle.Render("  --> restarting application..."))
 

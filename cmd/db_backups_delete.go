@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/aelpxy/nap/internal/utils"
 	"fmt"
 	"os"
 	"strings"
@@ -52,16 +53,7 @@ func runBackupsDelete(cmd *cobra.Command, args []string) {
 		fmt.Printf("    %s %s\n", dimStyle.Render("database:"), valueStyle.Render(bkp.DatabaseName))
 		fmt.Printf("    %s %s\n", dimStyle.Render("type:"), valueStyle.Render(bkp.DatabaseType))
 		fmt.Printf("    %s %s\n", dimStyle.Render("created:"), valueStyle.Render(bkp.CreatedAt.Format("2006-01-02 15:04:05")))
-
-		var sizeStr string
-		if bkp.SizeBytes < 1024 {
-			sizeStr = fmt.Sprintf("%d bytes", bkp.SizeBytes)
-		} else if bkp.SizeBytes < 1024*1024 {
-			sizeStr = fmt.Sprintf("%.1f kb", float64(bkp.SizeBytes)/1024)
-		} else {
-			sizeStr = fmt.Sprintf("%.1f mb", float64(bkp.SizeBytes)/(1024*1024))
-		}
-		fmt.Printf("    %s %s\n", dimStyle.Render("size:"), valueStyle.Render(sizeStr))
+		fmt.Printf("    %s %s\n", dimStyle.Render("size:"), valueStyle.Render(utils.FormatBytes(bkp.SizeBytes)))
 		fmt.Println()
 
 		fmt.Println(errorStyle.Render("[warn]  warning: this backup will be permanently deleted"))

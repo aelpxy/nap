@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/aelpxy/nap/internal/app"
+	"github.com/aelpxy/nap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -61,7 +62,7 @@ func runAppEnvImport(cmd *cobra.Command, args []string) {
 	fmt.Println(dimStyle.Render("  preview:"))
 	count := 0
 	for key, value := range envVars {
-		maskedValue := maskSensitiveValue(key, value)
+		maskedValue := utils.MaskSensitiveEnvValue(key, value)
 		fmt.Printf("    %s=%s\n", key, maskedValue)
 		count++
 		if count >= 10 {

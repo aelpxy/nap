@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/aelpxy/nap/internal/app"
+	"github.com/aelpxy/nap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -67,7 +68,7 @@ func runAppEnvList(cmd *cobra.Command, args []string) {
 
 	for _, key := range keys {
 		value := application.EnvVars[key]
-		maskedValue := maskSensitiveValue(key, value)
+		maskedValue := utils.MaskSensitiveEnvValue(key, value)
 		paddedKey := key + strings.Repeat(" ", maxKeyLen-len(key))
 		fmt.Printf("  %s  %s\n", dimStyle.Render(paddedKey), maskedValue)
 	}
@@ -77,20 +78,4 @@ func runAppEnvList(cmd *cobra.Command, args []string) {
 	fmt.Println()
 	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap app env set %s KEY=value' to add variables", appName)))
 	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap app env unset %s KEY' to remove variables", appName)))
-}
-
-func maskSensitiveValue(key, value string) string {
-	sensitiveKeywords := []string{"password", "secret", "token", "key", "api_key", "private"}
-
-	keyLower := strings.ToLower(key)
-	for _, keyword := range sensitiveKeywords {
-		if strings.Contains(keyLower, keyword) {
-			if len(value) <= 4 {
-				return "****"
-			}
-			return value[:4] + "****"
-		}
-	}
-
-	return value
 }

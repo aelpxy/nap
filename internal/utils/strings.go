@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func TruncateID(id string, length int) string {
@@ -33,6 +35,37 @@ func MaskSensitive(value string, showChars int) string {
 		return "****"
 	}
 	return value[:showChars] + "****"
+}
+
+// masks environment variable values if key contains sensitive keywords
+func MaskSensitiveEnvValue(key, value string) string {
+	sensitiveKeywords := []string{"password", "secret", "token", "key", "api_key", "private"}
+
+	keyLower := strings.ToLower(key)
+	for _, keyword := range sensitiveKeywords {
+		if strings.Contains(keyLower, keyword) {
+			if len(value) <= 4 {
+				return "****"
+			}
+			return value[:4] + "****"
+		}
+	}
+
+	return value
+}
+
+// formats bytes into human-readable format (B, KB, MB, GB, TB, PB, EB)
+func FormatBytes(bytes int64) string {
+	const unit = 1024
+	if bytes < unit {
+		return fmt.Sprintf("%d B", bytes)
+	}
+	div, exp := int64(unit), 0
+	for n := bytes / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f %cB", float64(bytes)/float64(div), "KMGTPE"[exp])
 }
 
 // write to temp file first then rename to prevent corruption

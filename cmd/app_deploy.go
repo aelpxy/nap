@@ -8,6 +8,7 @@ import (
 
 	"github.com/aelpxy/nap/internal/app"
 	"github.com/aelpxy/nap/internal/builder"
+	"github.com/aelpxy/nap/internal/constants"
 	"github.com/aelpxy/nap/internal/database"
 	"github.com/aelpxy/nap/internal/docker"
 	"github.com/aelpxy/nap/internal/project"
@@ -78,40 +79,40 @@ func runAppDeploy(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "%s invalid application name: name is required\n", errorStyle.Render("[error]"))
 		os.Exit(1)
 	}
-	if len(appName) > 64 {
-		fmt.Fprintf(os.Stderr, "%s invalid application name: maximum 64 characters\n", errorStyle.Render("[error]"))
+	if len(appName) > constants.MaxNameLength {
+		fmt.Fprintf(os.Stderr, "%s invalid application name: maximum %d characters\n", errorStyle.Render("[error]"), constants.MaxNameLength)
 		os.Exit(1)
 	}
 	if !utils.IsValidName(appName) {
 		fmt.Fprintf(os.Stderr, "%s invalid application name: use only lowercase letters, numbers, and dashes\n", errorStyle.Render("[error]"))
 		os.Exit(1)
 	}
-	if deployPort < 0 || deployPort > 65535 {
-		fmt.Fprintf(os.Stderr, "%s invalid port: must be between 0 and 65535\n", errorStyle.Render("[error]"))
+	if deployPort < constants.MinPort || deployPort > constants.MaxPort {
+		fmt.Fprintf(os.Stderr, "%s invalid port: must be between %d and %d\n", errorStyle.Render("[error]"), constants.MinPort, constants.MaxPort)
 		os.Exit(1)
 	}
-	if deployMemory <= 0 {
-		fmt.Fprintf(os.Stderr, "%s invalid memory: must be positive\n", errorStyle.Render("[error]"))
+	if deployMemory < constants.MinMemoryMB {
+		fmt.Fprintf(os.Stderr, "%s invalid memory: must be at least %dMB\n", errorStyle.Render("[error]"), constants.MinMemoryMB)
 		os.Exit(1)
 	}
-	if deployMemory > 65536 {
-		fmt.Fprintf(os.Stderr, "%s invalid memory: maximum 64GB (65536MB)\n", errorStyle.Render("[error]"))
+	if deployMemory > constants.MaxMemoryMB {
+		fmt.Fprintf(os.Stderr, "%s invalid memory: maximum %dMB (%dGB)\n", errorStyle.Render("[error]"), constants.MaxMemoryMB, constants.MaxMemoryMB/1024)
 		os.Exit(1)
 	}
-	if deployCPU <= 0 {
-		fmt.Fprintf(os.Stderr, "%s invalid cpu: must be positive\n", errorStyle.Render("[error]"))
+	if deployCPU < constants.MinCPUCores {
+		fmt.Fprintf(os.Stderr, "%s invalid cpu: must be at least %d core\n", errorStyle.Render("[error]"), constants.MinCPUCores)
 		os.Exit(1)
 	}
-	if deployCPU > 64 {
-		fmt.Fprintf(os.Stderr, "%s invalid cpu: maximum 64 cores\n", errorStyle.Render("[error]"))
+	if deployCPU > constants.MaxCPUCores {
+		fmt.Fprintf(os.Stderr, "%s invalid cpu: maximum %d cores\n", errorStyle.Render("[error]"), constants.MaxCPUCores)
 		os.Exit(1)
 	}
-	if deployInstances < 1 {
-		fmt.Fprintf(os.Stderr, "%s invalid instance count: minimum 1 required\n", errorStyle.Render("[error]"))
+	if deployInstances < constants.MinInstances {
+		fmt.Fprintf(os.Stderr, "%s invalid instance count: minimum %d required\n", errorStyle.Render("[error]"), constants.MinInstances)
 		os.Exit(1)
 	}
-	if deployInstances > 100 {
-		fmt.Fprintf(os.Stderr, "%s invalid instance count: maximum 100 instances\n", errorStyle.Render("[error]"))
+	if deployInstances > constants.MaxInstances {
+		fmt.Fprintf(os.Stderr, "%s invalid instance count: maximum %d instances\n", errorStyle.Render("[error]"), constants.MaxInstances)
 		os.Exit(1)
 	}
 

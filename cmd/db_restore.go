@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/aelpxy/nap/internal/utils"
 	"fmt"
 	"os"
 	"strings"
@@ -76,16 +77,7 @@ func runRestore(cmd *cobra.Command, args []string) {
 	fmt.Println(labelStyle.Render("  backup:"))
 	fmt.Printf("    %s %s\n", dimStyle.Render("id:"), valueStyle.Render(bkp.ID))
 	fmt.Printf("    %s %s\n", dimStyle.Render("created:"), valueStyle.Render(bkp.CreatedAt.Format("2006-01-02 15:04:05")))
-
-	var sizeStr string
-	if bkp.SizeBytes < 1024 {
-		sizeStr = fmt.Sprintf("%d bytes", bkp.SizeBytes)
-	} else if bkp.SizeBytes < 1024*1024 {
-		sizeStr = fmt.Sprintf("%.1f kb", float64(bkp.SizeBytes)/1024)
-	} else {
-		sizeStr = fmt.Sprintf("%.1f mb", float64(bkp.SizeBytes)/(1024*1024))
-	}
-	fmt.Printf("    %s %s\n", dimStyle.Render("size:"), valueStyle.Render(sizeStr))
+	fmt.Printf("    %s %s\n", dimStyle.Render("size:"), valueStyle.Render(utils.FormatBytes(bkp.SizeBytes)))
 	fmt.Println()
 
 	if !restoreForce {

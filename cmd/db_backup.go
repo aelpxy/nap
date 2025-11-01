@@ -7,6 +7,7 @@ import (
 	"github.com/aelpxy/nap/internal/backup"
 	"github.com/aelpxy/nap/internal/database"
 	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/nap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -89,15 +90,7 @@ func runBackup(cmd *cobra.Command, args []string) {
 	fmt.Println(labelStyle.Render("  backup details:"))
 	fmt.Printf("    %s %s\n", dimStyle.Render("id:"), valueStyle.Render(bkp.ID))
 
-	var sizeStr string
-	if bkp.SizeBytes < 1024 {
-		sizeStr = fmt.Sprintf("%d bytes", bkp.SizeBytes)
-	} else if bkp.SizeBytes < 1024*1024 {
-		sizeStr = fmt.Sprintf("%.1f kb", float64(bkp.SizeBytes)/1024)
-	} else {
-		sizeStr = fmt.Sprintf("%.1f mb", float64(bkp.SizeBytes)/(1024*1024))
-	}
-
+	sizeStr := utils.FormatBytes(bkp.SizeBytes)
 	if backupCompress {
 		sizeStr += " (compressed)"
 	}

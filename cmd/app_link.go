@@ -99,9 +99,7 @@ func runAppLink(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	fmt.Println(progressStyle.Render("  --> generating credentials..."))
-	fmt.Println(progressStyle.Render("  --> injecting environment variables..."))
-
+	fmt.Println()
 	fmt.Println(progressStyle.Render("  --> restarting application..."))
 
 	dockerClient, err := docker.NewClient()

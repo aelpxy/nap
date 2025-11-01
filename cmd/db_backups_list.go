@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/aelpxy/nap/internal/utils"
 	"fmt"
 	"os"
 
@@ -62,15 +63,7 @@ func runBackupsList(cmd *cobra.Command, args []string) {
 	var totalSize int64
 
 	for _, bkp := range backups {
-		var sizeStr string
-		if bkp.SizeBytes < 1024 {
-			sizeStr = fmt.Sprintf("%d b", bkp.SizeBytes)
-		} else if bkp.SizeBytes < 1024*1024 {
-			sizeStr = fmt.Sprintf("%.1f kb", float64(bkp.SizeBytes)/1024)
-		} else {
-			sizeStr = fmt.Sprintf("%.1f mb", float64(bkp.SizeBytes)/(1024*1024))
-		}
-
+		sizeStr := utils.FormatBytes(bkp.SizeBytes)
 		totalSize += bkp.SizeBytes
 
 		statusColor := "10"

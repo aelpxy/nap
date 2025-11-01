@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/aelpxy/nap/internal/constants"
 	"github.com/aelpxy/nap/internal/database"
 	"github.com/aelpxy/nap/internal/docker"
 	"github.com/aelpxy/nap/internal/utils"
@@ -25,8 +26,8 @@ func runVPCCreate(cmd *cobra.Command, args []string) {
 		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] vpc name is required"))
 		os.Exit(1)
 	}
-	if len(vpcName) > 64 {
-		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] vpc name: maximum 64 characters"))
+	if len(vpcName) > constants.MaxNameLength {
+		fmt.Fprintf(os.Stderr, "%s vpc name: maximum %d characters\n", errorStyle.Render("[error]"), constants.MaxNameLength)
 		os.Exit(1)
 	}
 	if !utils.IsValidName(vpcName) {

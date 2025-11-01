@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/aelpxy/nap/internal/constants"
 	"github.com/aelpxy/nap/internal/database"
 	"github.com/aelpxy/nap/internal/docker"
 	"github.com/aelpxy/nap/internal/utils"
@@ -37,8 +38,8 @@ func runCreate(cmd *cobra.Command, args []string) {
 		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] database name is required"))
 		os.Exit(1)
 	}
-	if len(dbName) > 64 {
-		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] database name: maximum 64 characters"))
+	if len(dbName) > constants.MaxNameLength {
+		fmt.Fprintf(os.Stderr, "%s database name: maximum %d characters\n", errorStyle.Render("[error]"), constants.MaxNameLength)
 		os.Exit(1)
 	}
 	if !utils.IsValidName(dbName) {
