@@ -1,0 +1,80 @@
+package cmd
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/aelpxy/nap/internal/database"
+	"github.com/aelpxy/nap/internal/docker"
+	"github.com/spf13/cobra"
+)
+
+var vpcCreateCmd = &cobra.Command{
+	Use:   "create [name]",
+	Short: "Create a new VPC",
+	Long:  "Create a new Virtual Private Cloud (VPC) for network isolation",
+	Args:  cobra.ExactArgs(1),
+	Run:   runVPCCreate,
+}
+
+func runVPCCreate(cmd *cobra.Command, args []string) {
+	vpcName := args[0]
+
+	vpcRegistry, err := database.NewVPCRegistryManager()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("[error] failed to initialize vpc registry: %v", err)))
+		os.Exit(1)
+	}
+
+	if err := vpcRegistry.Initialize(); err != nil {
+		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("[error] failed to initialize vpc registry: %v", err)))
+		os.Exit(1)
+	}
+
+	exists, err := vpcRegistry.Exists(vpcName)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("[error] failed to check vpc: %v", err)))
+		os.Exit(1)
+	}
+
+	if exists {
+		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("[error] vpc %s already exists", vpcName)))
+		os.Exit(1)
+	}
+
+	dockerClient, err := docker.NewClient()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("[error] failed to initialize network service: %v", err)))
+		os.Exit(1)
+	}
+	defer dockerClient.Close()
+
+	fmt.Println(titleStyle.Render(fmt.Sprintf("==> creating vpc: %s", vpcName)))
+	fmt.Println()
+
+	fmt.Println(progressStyle.Render("  --> creating network..."))
+	vpc, err := dockerClient.CreateVPC(vpcName)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("  [error] failed to create vpc network: %v", err)))
+		os.Exit(1)
+	}
+
+	if err := vpcRegistry.Add(*vpc); err != nil {
+		_ = dockerClient.DeleteVPC(vpc.NetworkID)
+		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("  [error] failed to add vpc to registry: %v", err)))
+		os.Exit(1)
+	}
+
+	fmt.Println(successStyle.Render("  [done] vpc created successfully"))
+	fmt.Println()
+	fmt.Println(labelStyle.Render("  vpc details:"))
+	fmt.Printf("    %s %s\n", dimStyle.Render("name:"), valueStyle.Render(vpc.Name))
+	fmt.Printf("    %s %s\n", dimStyle.Render("network:"), valueStyle.Render(vpc.NetworkName))
+	fmt.Printf("    %s %s\n", dimStyle.Render("subnet:"), valueStyle.Render(vpc.Subnet))
+	fmt.Println()
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap db create <type> <name> --vpc %s' to create databases in this vpc", vpcName)))
+}
+
+func init() {
+	vpcCmd.AddCommand(vpcCreateCmd)
+}

@@ -1,0 +1,35 @@
+# Binaries
+nap
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+dist/
+build/
+
+# Test binary
+*.test
+*.out
+
+# Go workspace file
+go.work
+go.work.sum
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Demo scripts
+demo-nap-db.sh
+demo-nap-deploy.sh
+
+# claude
+.claude
