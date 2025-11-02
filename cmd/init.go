@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/aelpxy/nap/internal/builder"
 	"github.com/spf13/cobra"
@@ -38,8 +40,10 @@ func runInit(cmd *cobra.Command, args []string) {
 	}
 
 	language, _ := builder.DetectLanguage(cwd)
+	wasDetected := language != "unknown"
+
 	if language == "unknown" {
-		language = "nodejs"
+		language = promptForRuntime()
 	}
 
 	port := builder.GetDefaultPort(language)
@@ -49,9 +53,16 @@ func runInit(cmd *cobra.Command, args []string) {
 		appName = filepath.Base(cwd)
 	}
 
-	fmt.Println(progressStyle.Render("  --> detecting project..."))
-	fmt.Printf("    %s %s\n", dimStyle.Render("language:"), valueStyle.Render(language))
-	fmt.Printf("    %s %s\n", dimStyle.Render("default port:"), valueStyle.Render(fmt.Sprintf("%d", port)))
+	fmt.Println()
+	if wasDetected {
+		fmt.Println(progressStyle.Render("  --> detected project"))
+		fmt.Printf("    %s %s\n", dimStyle.Render("language:"), valueStyle.Render(language))
+		fmt.Printf("    %s %s\n", dimStyle.Render("default port:"), valueStyle.Render(fmt.Sprintf("%d", port)))
+	} else {
+		fmt.Println(progressStyle.Render("  --> configuring project"))
+		fmt.Printf("    %s %s\n", dimStyle.Render("runtime:"), valueStyle.Render(language))
+		fmt.Printf("    %s %s\n", dimStyle.Render("port:"), valueStyle.Render(fmt.Sprintf("%d", port)))
+	}
 	fmt.Printf("    %s %s\n", dimStyle.Render("app name:"), valueStyle.Render(appName))
 	fmt.Println()
 
@@ -78,14 +89,27 @@ func runInit(cmd *cobra.Command, args []string) {
 }
 
 func generateMinimalConfig(name, runtime string, port int) string {
-	envVar := "NODE_ENV"
+	envVar := "APP_ENV"
 	switch runtime {
+	case "nodejs":
+		envVar = "NODE_ENV"
 	case "python":
 		envVar = "PYTHON_ENV"
 	case "go":
 		envVar = "GO_ENV"
 	case "rust":
 		envVar = "RUST_ENV"
+	case "ruby":
+		envVar = "RAILS_ENV"
+	case "php":
+		envVar = "APP_ENV"
+	case "java":
+		envVar = "SPRING_PROFILES_ACTIVE"
+	}
+
+	runtimeValue := runtime
+	if runtime == "unknown" {
+		runtimeValue = "docker"
 	}
 
 	return fmt.Sprintf(`# nap.toml - Minimal configuration
@@ -112,18 +136,31 @@ timeout = 5
 
 [env]
 %s = "production"
-`, name, runtime, port, envVar)
+`, name, runtimeValue, port, envVar)
 }
 
 func generateFullConfig(name, runtime string, port int) string {
-	envVar := "NODE_ENV"
+	envVar := "APP_ENV"
 	switch runtime {
+	case "nodejs":
+		envVar = "NODE_ENV"
 	case "python":
 		envVar = "PYTHON_ENV"
 	case "go":
 		envVar = "GO_ENV"
 	case "rust":
 		envVar = "RUST_ENV"
+	case "ruby":
+		envVar = "RAILS_ENV"
+	case "php":
+		envVar = "APP_ENV"
+	case "java":
+		envVar = "SPRING_PROFILES_ACTIVE"
+	}
+
+	runtimeValue := runtime
+	if runtime == "unknown" {
+		runtimeValue = "docker"
 	}
 
 	return fmt.Sprintf(`# nap.toml - Full configuration
@@ -131,7 +168,7 @@ func generateFullConfig(name, runtime string, port int) string {
 [app]
 name = "%s"
 region = "us-east-1"
-runtime = "%s"  # nodejs, python, go, rust, docker
+runtime = "%s"  # nodejs, python, go, rust, ruby, php, java, docker
 env = "production"  # production, staging, development
 
 [build]
@@ -212,7 +249,50 @@ cpu_threshold = 70         # percentage
 memory_threshold = 80      # percentage
 scale_up_delay = 60        # seconds
 scale_down_delay = 300     # seconds
-`, name, runtime, port, name, envVar)
+`, name, runtimeValue, port, name, envVar)
+}
+
+func promptForRuntime() string {
+	fmt.Println()
+	fmt.Println(infoStyle.Render("  [info] could not detect project language"))
+	fmt.Println()
+	fmt.Println(labelStyle.Render("  select runtime:"))
+	fmt.Println(dimStyle.Render("    1. nodejs"))
+	fmt.Println(dimStyle.Render("    2. python"))
+	fmt.Println(dimStyle.Render("    3. go"))
+	fmt.Println(dimStyle.Render("    4. rust"))
+	fmt.Println(dimStyle.Render("    5. ruby"))
+	fmt.Println(dimStyle.Render("    6. php"))
+	fmt.Println(dimStyle.Render("    7. java"))
+	fmt.Println()
+	fmt.Print("  [1-7]: ")
+
+	reader := bufio.NewReader(os.Stdin)
+	input, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("[error] failed to read input: %v", err)))
+		os.Exit(1)
+	}
+
+	choice := strings.TrimSpace(input)
+
+	runtimes := map[string]string{
+		"1": "nodejs",
+		"2": "python",
+		"3": "go",
+		"4": "rust",
+		"5": "ruby",
+		"6": "php",
+		"7": "java",
+	}
+
+	runtime, ok := runtimes[choice]
+	if !ok {
+		fmt.Println(dimStyle.Render("  invalid choice, using generic configuration"))
+		return "unknown"
+	}
+
+	return runtime
 }
 
 func init() {

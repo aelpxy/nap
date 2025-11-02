@@ -56,18 +56,5 @@ func DetectLanguage(projectPath string) (string, error) {
 }
 
 func GetDefaultPort(language string) int {
-	defaults := map[string]int{
-		"nodejs": 3000,
-		"python": 8000,
-		"go":     8080,
-		"rust":   8080,
-		"ruby":   3000,
-		"java":   8080,
-	}
-
-	if port, ok := defaults[language]; ok {
-		return port
-	}
-
 	return 8080
 }

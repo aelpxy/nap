@@ -3,7 +3,7 @@ package main
 import "github.com/aelpxy/nap/cmd"
 
 var (
-	Version   = "dev"
+	Version   = "alpha"
 	BuildTime = "unknown"
 	GitCommit = "unknown"
 )
