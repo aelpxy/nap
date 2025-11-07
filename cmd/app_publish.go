@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/config"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/config"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -151,7 +151,7 @@ var appUnpublishCmd = &cobra.Command{
 		fmt.Println(successStyle.Render("  [done]") + " application unpublished")
 		fmt.Println()
 		fmt.Println("  app is now accessible only within vpc")
-		fmt.Println("  " + dimStyle.Render(fmt.Sprintf("internal: http://%s.nap.local", appName)))
+		fmt.Println("  " + dimStyle.Render(fmt.Sprintf("internal: http://%s.yap.local", appName)))
 	},
 }
 
@@ -279,5 +279,5 @@ func init() {
 	appDomainCmd.AddCommand(appDomainAddCmd)
 	appDomainCmd.AddCommand(appDomainRemoveCmd)
 
-	appPublishCmd.Flags().StringVar(&publishDomain, "domain", "", "custom domain (optional, defaults to {app}.nap.{base-domain})")
+	appPublishCmd.Flags().StringVar(&publishDomain, "domain", "", "custom domain (optional, defaults to {app}.yap.{base-domain})")
 }

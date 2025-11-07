@@ -1,5 +1,5 @@
 # Binaries
-nap
+yap
 *.exe
 *.exe~
 *.dll
@@ -28,8 +28,8 @@ go.work.sum
 Thumbs.db
 
 # Demo scripts
-demo-nap-db.sh
-demo-nap-deploy.sh
+demo-yap-db.sh
+demo-yap-deploy.sh
 
 # claude
 .claude

@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/pkg/models"
 )
 
 func DetectBuildMethod(projectPath string) (models.BuildType, string, error) {

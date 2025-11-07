@@ -6,10 +6,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -163,6 +163,6 @@ func runAppEnvSet(cmd *cobra.Command, args []string) {
 		fmt.Println(successStyle.Render("  [done] application restarted"))
 	} else {
 		fmt.Println()
-		fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'nap app restart %s' to apply changes", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'yap app restart %s' to apply changes", appName)))
 	}
 }

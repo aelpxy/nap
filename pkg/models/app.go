@@ -56,7 +56,7 @@ type Application struct {
 
 	InternalHostname string   `json:"internal_hostname"`
 	Published        bool     `json:"published"`
-	PublishedURL     string   `json:"published_url"` // https://{name}.nap.app
+	PublishedURL     string   `json:"published_url"` // https://{name}.yap.app
 	PublishedDomain  string   `json:"published_domain"`
 	CustomDomains    []string `json:"custom_domains"`
 	PublishedPort    int      `json:"published_port"`

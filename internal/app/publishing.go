@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/config"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/config"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 )
 
 type PublishingManager struct {
@@ -26,7 +26,7 @@ func NewPublishingManager(dockerClient *docker.Client, registry *RegistryManager
 
 func (pm *PublishingManager) PublishApp(ctx context.Context, appName, customDomain string) error {
 	if err := pm.configManager.ValidatePublishing(); err != nil {
-		return fmt.Errorf("publishing not configured: %w\n\nrun 'nap config setup' to configure publishing", err)
+		return fmt.Errorf("publishing not configured: %w\n\nrun 'yap config setup' to configure publishing", err)
 	}
 
 	lockMgr := GetGlobalLockManager()
@@ -45,7 +45,7 @@ func (pm *PublishingManager) PublishApp(ctx context.Context, appName, customDoma
 		domain = customDomain
 	} else {
 		baseDomain := pm.configManager.GetConfig().Publishing.BaseDomain
-		domain = fmt.Sprintf("%s.nap.%s", appName, baseDomain)
+		domain = fmt.Sprintf("%s.yap.%s", appName, baseDomain)
 	}
 
 	if !isValidDomain(domain) {
@@ -92,7 +92,7 @@ func (pm *PublishingManager) UnpublishApp(ctx context.Context, appName string) e
 
 	app.Published = false
 	app.PublishedDomain = ""
-	app.PublishedURL = fmt.Sprintf("http://%s.nap.local", appName)
+	app.PublishedURL = fmt.Sprintf("http://%s.yap.local", appName)
 	app.CustomDomains = nil
 	app.SSLEnabled = false
 	app.SSLCertIssuer = ""
@@ -191,7 +191,7 @@ func (pm *PublishingManager) RemoveCustomDomain(ctx context.Context, appName, do
 
 func (pm *PublishingManager) recreateContainersWithPublishing(ctx context.Context, app *models.Application) error {
 
-	vpcNetworkName := fmt.Sprintf("%s.nap-vpc-network", app.VPC)
+	vpcNetworkName := fmt.Sprintf("%s.yap-vpc-network", app.VPC)
 
 	for i := 1; i <= app.Instances; i++ {
 		if i-1 >= len(app.ContainerIDs) {

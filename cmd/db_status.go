@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/utils"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
 )
@@ -114,10 +114,10 @@ func runStatus(cmd *cobra.Command, args []string) {
 	fmt.Println()
 
 	fmt.Println(dimStyle.Render("  quick actions:"))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap db shell %s         # open database shell", dbName)))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap db logs %s          # view logs", dbName)))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap db credentials %s   # show connection details", dbName)))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap db backup %s        # create backup", dbName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap db shell %s         # open database shell", dbName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap db logs %s          # view logs", dbName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap db credentials %s   # show connection details", dbName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap db backup %s        # create backup", dbName)))
 	fmt.Println()
 }
 

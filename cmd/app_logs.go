@@ -6,8 +6,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/docker"
 	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/spf13/cobra"
 )

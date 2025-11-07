@@ -5,7 +5,7 @@ import "fmt"
 type ProjectConfig struct {
 	App        AppConfig           `toml:"app"`
 	Build      BuildConfig         `toml:"build"`
-	Deployment NapDeploymentConfig `toml:"deployment"`
+	Deployment YapDeploymentConfig `toml:"deployment"`
 	Deploy     DeployConfig        `toml:"deploy"`
 	Network    NetworkConfig       `toml:"network"`
 	Env        map[string]string   `toml:"env"`
@@ -29,7 +29,7 @@ type BuildConfig struct {
 	BuildArgs  []string `toml:"build_args"`
 }
 
-type NapDeploymentConfig struct {
+type YapDeploymentConfig struct {
 	Strategy            string `toml:"strategy"`
 	MaxSurge            int    `toml:"max_surge"`
 	RollingInterval     int    `toml:"rolling_interval"`

@@ -125,7 +125,7 @@ func (r *RuntimeInfo) GetRuntimeName() string {
 func (r *RuntimeInfo) EnsureSocketExists() error {
 	if _, err := os.Stat(r.SocketPath); err != nil {
 		if r.Type == RuntimePodman {
-			return fmt.Errorf("podman socket not found at %s - run 'nap daemon start' to start the service", r.SocketPath)
+			return fmt.Errorf("podman socket not found at %s - run 'yap daemon start' to start the service", r.SocketPath)
 		}
 		return fmt.Errorf("runtime socket not found at %s", r.SocketPath)
 	}

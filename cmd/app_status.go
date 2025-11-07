@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/utils"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
 )
@@ -159,10 +159,10 @@ func runAppStatus(cmd *cobra.Command, args []string) {
 	fmt.Println()
 
 	fmt.Println(dimStyle.Render("  quick actions:"))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap app logs %s         # view logs", appName)))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap app console %s      # open shell", appName)))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap app restart %s      # restart", appName)))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap app scale %s --add 1   # add instance", appName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap app logs %s         # view logs", appName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap app console %s      # open shell", appName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap app restart %s      # restart", appName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap app scale %s --add 1   # add instance", appName)))
 	fmt.Println()
 }
 

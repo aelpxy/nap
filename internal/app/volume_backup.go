@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 )
@@ -23,14 +23,14 @@ type VolumeBackupManager struct {
 
 func NewVolumeBackupManager(dockerClient *docker.Client, volumeManager *VolumeManager) *VolumeBackupManager {
 	homeDir, _ := os.UserHomeDir()
-	backupDir := filepath.Join(homeDir, ".nap", "volume-backups")
+	backupDir := filepath.Join(homeDir, ".yap", "volume-backups")
 	os.MkdirAll(backupDir, 0755)
 
 	return &VolumeBackupManager{
 		dockerClient:  dockerClient,
 		volumeManager: volumeManager,
 		backupDir:     backupDir,
-		registryPath:  filepath.Join(homeDir, ".nap", "volume-registry.json"),
+		registryPath:  filepath.Join(homeDir, ".yap", "volume-registry.json"),
 	}
 }
 
@@ -154,7 +154,7 @@ func (vbm *VolumeBackupManager) RestoreVolume(ctx context.Context, appName, volu
 	}
 
 	if volumeInfo.UsedBy > 0 && !stopApp {
-		return fmt.Errorf("volume is in use by %d container(s). stop the application first: nap app stop %s", volumeInfo.UsedBy, appName)
+		return fmt.Errorf("volume is in use by %d container(s). stop the application first: yap app stop %s", volumeInfo.UsedBy, appName)
 	}
 
 	dockerVolumeName := GetVolumeSource(appName, volumeInfo.Volume)

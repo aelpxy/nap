@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/docker/docker/api/types/network"
 )
 
 const (
-	VPCNetworkSuffix = ".nap-vpc-network"
+	VPCNetworkSuffix = ".yap-vpc-network"
 )
 
 func (c *Client) CreateVPC(vpcName string) (*models.VPC, error) {
@@ -45,9 +45,9 @@ func (c *Client) CreateVPC(vpcName string) (*models.VPC, error) {
 			},
 		},
 		Labels: map[string]string{
-			"nap.managed":  "true",
-			"nap.type":     "vpc",
-			"nap.vpc.name": vpcName,
+			"yap.managed":  "true",
+			"yap.type":     "vpc",
+			"yap.vpc.name": vpcName,
 		},
 	})
 

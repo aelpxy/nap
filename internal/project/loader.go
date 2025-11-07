@@ -6,24 +6,24 @@ import (
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/pkg/models"
 )
 
 func LoadConfig(projectPath string) (*models.ProjectConfig, error) {
-	configPath := filepath.Join(projectPath, "nap.toml")
+	configPath := filepath.Join(projectPath, "yap.toml")
 
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		return nil, fmt.Errorf("nap.toml not found in %s", projectPath)
+		return nil, fmt.Errorf("yap.toml not found in %s", projectPath)
 	}
 
 	data, err := os.ReadFile(configPath)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read nap.toml: %w", err)
+		return nil, fmt.Errorf("failed to read yap.toml: %w", err)
 	}
 
 	var config models.ProjectConfig
 	if err := toml.Unmarshal(data, &config); err != nil {
-		return nil, fmt.Errorf("failed to parse nap.toml: %w", err)
+		return nil, fmt.Errorf("failed to parse yap.toml: %w", err)
 	}
 
 	if err := validateAndSetDefaults(&config); err != nil {
@@ -34,7 +34,7 @@ func LoadConfig(projectPath string) (*models.ProjectConfig, error) {
 }
 
 func LoadConfigIfExists(projectPath string) (*models.ProjectConfig, error) {
-	configPath := filepath.Join(projectPath, "nap.toml")
+	configPath := filepath.Join(projectPath, "yap.toml")
 
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		return nil, nil // Not an error, just doesn't exist

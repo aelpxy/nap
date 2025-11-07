@@ -15,23 +15,23 @@ func (c *Client) EnsureNetwork() error {
 	}
 
 	for _, net := range networks {
-		if net.Name == NapNetwork {
+		if net.Name == InternalNetwork {
 			return nil
 		}
 	}
 
-	_, err = c.cli.NetworkCreate(c.ctx, NapNetwork, network.CreateOptions{
+	_, err = c.cli.NetworkCreate(c.ctx, InternalNetwork, network.CreateOptions{
 		Driver: "bridge",
 		IPAM: &network.IPAM{
 			Config: []network.IPAMConfig{
 				{
-					Subnet: NapNetworkSubnet,
+					Subnet: InternalNetworkSubnet,
 				},
 			},
 		},
 		Labels: map[string]string{
-			"nap.managed": "true",
-			"nap.type":    "network",
+			"yap.managed": "true",
+			"yap.type":    "network",
 		},
 	})
 
@@ -45,7 +45,7 @@ func (c *Client) EnsureNetwork() error {
 func (c *Client) GetNetworkConfig() *network.NetworkingConfig {
 	return &network.NetworkingConfig{
 		EndpointsConfig: map[string]*network.EndpointSettings{
-			NapNetwork: {},
+			InternalNetwork: {},
 		},
 	}
 }

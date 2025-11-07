@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
-	"github.com/aelpxy/nap/internal/utils"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/utils"
+	"github.com/aelpxy/yap/pkg/models"
 )
 
 type ConfigManager struct {
@@ -22,7 +22,7 @@ func NewConfigManager() (*ConfigManager, error) {
 		return nil, fmt.Errorf("failed to get home directory: %w", err)
 	}
 
-	configPath := filepath.Join(homeDir, ".nap", "config.toml")
+	configPath := filepath.Join(homeDir, ".yap", "config.toml")
 
 	cm := &ConfigManager{
 		configPath: configPath,
@@ -58,9 +58,9 @@ func (cm *ConfigManager) Load() error {
 }
 
 func (cm *ConfigManager) Save() error {
-	napDir := filepath.Dir(cm.configPath)
-	if err := os.MkdirAll(napDir, 0755); err != nil {
-		return fmt.Errorf("failed to create .nap directory: %w", err)
+	yapDir := filepath.Dir(cm.configPath)
+	if err := os.MkdirAll(yapDir, 0755); err != nil {
+		return fmt.Errorf("failed to create .yap directory: %w", err)
 	}
 
 	var buf bytes.Buffer

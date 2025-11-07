@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/database"
+	"github.com/aelpxy/yap/internal/database"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/spf13/cobra"
@@ -13,7 +13,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all databases",
-	Long:  "List all nap-managed databases",
+	Long:  "List all yap-managed databases",
 	Run:   runList,
 }
 
@@ -38,7 +38,7 @@ func runList(cmd *cobra.Command, args []string) {
 	if len(databases) == 0 {
 		fmt.Println(dimStyle.Render("no databases found."))
 		fmt.Println()
-		fmt.Printf("create one with: %s\n", dimStyle.Render("nap db create postgres my-db"))
+		fmt.Printf("create one with: %s\n", dimStyle.Render("yap db create postgres my-db"))
 		return
 	}
 
@@ -96,9 +96,9 @@ func runList(cmd *cobra.Command, args []string) {
 	fmt.Println()
 
 	fmt.Println(dimStyle.Render("  common commands:"))
-	fmt.Printf("    %s\n", dimStyle.Render("nap db status <name>       # view details"))
-	fmt.Printf("    %s\n", dimStyle.Render("nap db credentials <name>  # get credentials"))
-	fmt.Printf("    %s\n", dimStyle.Render("nap db logs <name>         # view logs"))
+	fmt.Printf("    %s\n", dimStyle.Render("yap db status <name>       # view details"))
+	fmt.Printf("    %s\n", dimStyle.Render("yap db credentials <name>  # get credentials"))
+	fmt.Printf("    %s\n", dimStyle.Render("yap db logs <name>         # view logs"))
 	fmt.Println()
 }
 

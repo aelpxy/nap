@@ -1,4 +1,4 @@
-module github.com/aelpxy/nap
+module github.com/aelpxy/yap
 
 go 1.25.3
 

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/spf13/cobra"
 )
 
@@ -120,12 +120,12 @@ func recreateContainerWithoutPort(dockerClient *docker.Client, db *models.Databa
 	}
 
 	labels := map[string]string{
-		"nap.managed": "true",
-		"nap.type":    "database",
-		"nap.db.type": string(db.Type),
-		"nap.db.name": db.Name,
-		"nap.db.id":   db.ID,
-		"nap.vpc":     db.VPC,
+		"yap.managed": "true",
+		"yap.type":    "database",
+		"yap.db.type": string(db.Type),
+		"yap.db.name": db.Name,
+		"yap.db.id":   db.ID,
+		"yap.vpc":     db.VPC,
 	}
 
 	var image string

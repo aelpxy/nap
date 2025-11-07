@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 	dockerTypes "github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
 )
@@ -151,10 +151,10 @@ func (s *BlueGreenStrategy) Deploy(opts DeploymentOptions) (string, error) {
 		fmt.Printf("  %s environment kept for rollback\n", currentColor)
 		fmt.Println()
 		fmt.Println("  to complete deployment:")
-		fmt.Printf("    nap app deployment confirm %s\n", opts.App.Name)
+		fmt.Printf("    yap app deployment confirm %s\n", opts.App.Name)
 		fmt.Println()
 		fmt.Println("  to rollback:")
-		fmt.Printf("    nap app deployment rollback %s\n", opts.App.Name)
+		fmt.Printf("    yap app deployment rollback %s\n", opts.App.Name)
 	}
 
 	fmt.Println()
@@ -164,16 +164,16 @@ func (s *BlueGreenStrategy) Deploy(opts DeploymentOptions) (string, error) {
 }
 
 func (s *BlueGreenStrategy) createInstance(ctx context.Context, opts DeploymentOptions, instanceNum int, color models.DeploymentColor, withTraefikLabels bool) (string, error) {
-	containerName := fmt.Sprintf("nap-app-%s-%s-%d", opts.App.Name, color, instanceNum)
+	containerName := fmt.Sprintf("yap-app-%s-%s-%d", opts.App.Name, color, instanceNum)
 
 	labels := map[string]string{
-		"nap.managed":      "true",
-		"nap.type":         "app",
-		"nap.app.name":     opts.App.Name,
-		"nap.app.id":       opts.App.ID,
-		"nap.vpc":          opts.VPCName,
-		"nap.app.instance": fmt.Sprintf("%d", instanceNum),
-		"nap.app.color":    string(color),
+		"yap.managed":      "true",
+		"yap.type":         "app",
+		"yap.app.name":     opts.App.Name,
+		"yap.app.id":       opts.App.ID,
+		"yap.vpc":          opts.VPCName,
+		"yap.app.instance": fmt.Sprintf("%d", instanceNum),
+		"yap.app.color":    string(color),
 	}
 
 	if withTraefikLabels {
@@ -186,7 +186,7 @@ func (s *BlueGreenStrategy) createInstance(ctx context.Context, opts DeploymentO
 	for k, v := range opts.App.EnvVars {
 		envVars[k] = v
 	}
-	InjectNapMetadata(envVars, opts.App.ID, instanceNum, "local")
+	InjectMetadata(envVars, opts.App.ID, instanceNum, "local")
 	envArray := BuildEnvArray(envVars)
 
 	containerConfig := &dockerTypes.Config{
@@ -208,7 +208,7 @@ func (s *BlueGreenStrategy) createInstance(ctx context.Context, opts DeploymentO
 		Mounts: mounts,
 	}
 
-	vpcNetworkName := fmt.Sprintf("%s.nap-vpc-network", opts.VPCName)
+	vpcNetworkName := fmt.Sprintf("%s.yap-vpc-network", opts.VPCName)
 	networkConfig := &network.NetworkingConfig{
 		EndpointsConfig: map[string]*network.EndpointSettings{
 			vpcNetworkName: {},
@@ -242,13 +242,13 @@ func (s *BlueGreenStrategy) updateContainerLabels(ctx context.Context, container
 	}
 
 	labels := map[string]string{
-		"nap.managed":      "true",
-		"nap.type":         "app",
-		"nap.app.name":     opts.App.Name,
-		"nap.app.id":       opts.App.ID,
-		"nap.vpc":          opts.VPCName,
-		"nap.app.instance": fmt.Sprintf("%d", instanceNum),
-		"nap.app.color":    string(color),
+		"yap.managed":      "true",
+		"yap.type":         "app",
+		"yap.app.name":     opts.App.Name,
+		"yap.app.id":       opts.App.ID,
+		"yap.vpc":          opts.VPCName,
+		"yap.app.instance": fmt.Sprintf("%d", instanceNum),
+		"yap.app.color":    string(color),
 	}
 
 	if addTraefikLabels {
@@ -268,7 +268,7 @@ func (s *BlueGreenStrategy) updateContainerLabels(ctx context.Context, container
 		return fmt.Errorf("failed to remove container: %w", err)
 	}
 
-	containerName := fmt.Sprintf("nap-app-%s-%s-%d", opts.App.Name, color, instanceNum)
+	containerName := fmt.Sprintf("yap-app-%s-%s-%d", opts.App.Name, color, instanceNum)
 
 	containerConfig := &dockerTypes.Config{
 		Image:  inspect.Config.Image,
@@ -278,7 +278,7 @@ func (s *BlueGreenStrategy) updateContainerLabels(ctx context.Context, container
 
 	hostConfig := inspect.HostConfig
 
-	vpcNetworkName := fmt.Sprintf("%s.nap-vpc-network", opts.VPCName)
+	vpcNetworkName := fmt.Sprintf("%s.yap-vpc-network", opts.VPCName)
 	networkConfig := &network.NetworkingConfig{
 		EndpointsConfig: map[string]*network.EndpointSettings{
 			vpcNetworkName: {},

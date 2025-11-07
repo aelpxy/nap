@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
+	"github.com/aelpxy/yap/internal/app"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/spf13/cobra"
@@ -38,7 +38,7 @@ func runAppList(cmd *cobra.Command, args []string) {
 	if len(applications) == 0 {
 		fmt.Println(dimStyle.Render("no applications found."))
 		fmt.Println()
-		fmt.Printf("deploy one with: %s\n", dimStyle.Render("nap app deploy myapp ."))
+		fmt.Printf("deploy one with: %s\n", dimStyle.Render("yap app deploy myapp ."))
 		return
 	}
 
@@ -99,9 +99,9 @@ func runAppList(cmd *cobra.Command, args []string) {
 	fmt.Println()
 
 	fmt.Println(dimStyle.Render("  common commands:"))
-	fmt.Printf("    %s\n", dimStyle.Render("nap app status <name>   # view details"))
-	fmt.Printf("    %s\n", dimStyle.Render("nap app logs <name>     # view logs"))
-	fmt.Printf("    %s\n", dimStyle.Render("nap app restart <name>  # restart application"))
+	fmt.Printf("    %s\n", dimStyle.Render("yap app status <name>   # view details"))
+	fmt.Printf("    %s\n", dimStyle.Render("yap app logs <name>     # view logs"))
+	fmt.Printf("    %s\n", dimStyle.Render("yap app restart <name>  # restart application"))
 	fmt.Println()
 }
 

@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/pkg/archive"
 )
@@ -217,7 +217,7 @@ func (b *Builder) buildInternal(projectPath, appName string, buildType models.Bu
 
 	language, _ := DetectLanguage(projectPath)
 
-	imageName := fmt.Sprintf("nap/%s:latest", appName)
+	imageName := fmt.Sprintf("yap/%s:latest", appName)
 
 	fmt.Fprintf(output, "  --> detected build method: %s\n", buildType)
 	if language != "unknown" {

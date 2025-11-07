@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
 	"github.com/spf13/cobra"
 )
 

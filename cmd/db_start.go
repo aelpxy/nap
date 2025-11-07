@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
 	"github.com/spf13/cobra"
 )
 
@@ -56,7 +56,7 @@ func runStart(cmd *cobra.Command, args []string) {
 	fmt.Println(successStyle.Render("  [ok] database started successfully"))
 	fmt.Println()
 
-	fmt.Printf("check status with: %s\n", infoStyle.Render(fmt.Sprintf("nap db status %s", dbName)))
+	fmt.Printf("check status with: %s\n", infoStyle.Render(fmt.Sprintf("yap db status %s", dbName)))
 	fmt.Println()
 }
 

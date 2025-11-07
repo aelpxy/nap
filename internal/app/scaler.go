@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/router"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/router"
+	"github.com/aelpxy/yap/pkg/models"
 	dockerTypes "github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
 )
@@ -26,17 +26,17 @@ func ScaleUp(
 
 	for i := 0; i < count; i++ {
 		instanceNum := currentCount + i + 1
-		containerName := fmt.Sprintf("nap-app-%s-%d", app.Name, instanceNum)
+		containerName := fmt.Sprintf("yap-app-%s-%d", app.Name, instanceNum)
 
 		traefikLabels := traefik.GenerateLabelsForApp(app)
 
 		labels := map[string]string{
-			"nap.managed":      "true",
-			"nap.type":         "app",
-			"nap.app.name":     app.Name,
-			"nap.app.id":       app.ID,
-			"nap.vpc":          app.VPC,
-			"nap.app.instance": fmt.Sprintf("%d", instanceNum),
+			"yap.managed":      "true",
+			"yap.type":         "app",
+			"yap.app.name":     app.Name,
+			"yap.app.id":       app.ID,
+			"yap.vpc":          app.VPC,
+			"yap.app.instance": fmt.Sprintf("%d", instanceNum),
 		}
 		for k, v := range traefikLabels {
 			labels[k] = v
@@ -46,7 +46,7 @@ func ScaleUp(
 		for k, v := range app.EnvVars {
 			envVars[k] = v
 		}
-		InjectNapMetadata(envVars, app.ID, instanceNum, "local")
+		InjectMetadata(envVars, app.ID, instanceNum, "local")
 		envArray := BuildEnvArray(envVars)
 
 		containerConfig := &dockerTypes.Config{

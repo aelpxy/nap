@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/volume"
 )
@@ -55,9 +55,9 @@ func (vm *VolumeManager) AddVolume(ctx context.Context, appName string, vol mode
 		volumeCreateOptions := volume.CreateOptions{
 			Name: dockerVolumeName,
 			Labels: map[string]string{
-				"nap.managed":  "true",
-				"nap.app.name": appName,
-				"nap.vol.name": vol.Name,
+				"yap.managed":  "true",
+				"yap.app.name": appName,
+				"yap.vol.name": vol.Name,
 			},
 		}
 
@@ -188,7 +188,7 @@ func (vm *VolumeManager) InspectVolume(ctx context.Context, appName, volumeName 
 }
 
 func getDockerVolumeName(appName, volumeName string) string {
-	return fmt.Sprintf("nap-vol-%s-%s", appName, volumeName)
+	return fmt.Sprintf("yap-vol-%s-%s", appName, volumeName)
 }
 
 func GetVolumeSource(appName string, vol models.Volume) string {

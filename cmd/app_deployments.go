@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
+	"github.com/aelpxy/yap/internal/app"
 	"github.com/spf13/cobra"
 )
 
@@ -74,7 +74,7 @@ func runAppDeployments(cmd *cobra.Command, args []string) {
 	}
 
 	fmt.Println(labelStyle.Render("  rollback:"))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap app rollback %s --version N", appName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap app rollback %s --version N", appName)))
 	fmt.Println()
 }
 

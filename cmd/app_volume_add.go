@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/spf13/cobra"
 )
 
@@ -25,9 +25,9 @@ var appVolumeAddCmd = &cobra.Command{
 	Long: `Add a persistent volume to an application.
 
 Examples:
-  nap app volume add myapp data /app/data
-  nap app volume add myapp uploads /app/uploads --readonly
-  nap app volume add myapp config /etc/app --type bind --source /host/config`,
+  yap app volume add myapp data /app/data
+  yap app volume add myapp uploads /app/uploads --readonly
+  yap app volume add myapp config /etc/app --type bind --source /host/config`,
 	Args: cobra.ExactArgs(3),
 	Run:  runAppVolumeAdd,
 }
@@ -111,5 +111,5 @@ func runAppVolumeAdd(cmd *cobra.Command, args []string) {
 	fmt.Println()
 
 	fmt.Println(infoStyle.Render("  [info] redeploy app to mount the volume"))
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'nap app deploy %s' to apply changes", appName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'yap app deploy %s' to apply changes", appName)))
 }

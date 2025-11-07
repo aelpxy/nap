@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/runtime"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/runtime"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/filters"
@@ -32,7 +32,7 @@ func runDoctor(cmd *cobra.Command, args []string) {
 	allGood := true
 
 	allGood = checkRuntime() && allGood
-	allGood = checkNapDirectories() && allGood
+	allGood = checkDirectories() && allGood
 	allGood = checkRegistries() && allGood
 	allGood = checkProxy() && allGood
 	allGood = checkVPCs() && allGood
@@ -42,7 +42,7 @@ func runDoctor(cmd *cobra.Command, args []string) {
 	if allGood {
 		fmt.Println(successStyle.Render("  [done] all checks passed"))
 		fmt.Println()
-		fmt.Println(dimStyle.Render("  your nap installation is healthy and ready to use"))
+		fmt.Println(dimStyle.Render("  your yap installation is healthy and ready to use"))
 	} else {
 		fmt.Println(errorStyle.Render("  [error] some checks failed"))
 		fmt.Println()
@@ -91,8 +91,8 @@ func checkRuntime() bool {
 	return true
 }
 
-func checkNapDirectories() bool {
-	fmt.Println(labelStyle.Render("  nap directories"))
+func checkDirectories() bool {
+	fmt.Println(labelStyle.Render("  yap directories"))
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -100,25 +100,25 @@ func checkNapDirectories() bool {
 		return false
 	}
 
-	napDir := filepath.Join(homeDir, ".nap")
+	yapDir := filepath.Join(homeDir, ".yap")
 
-	if _, err := os.Stat(napDir); os.IsNotExist(err) {
-		fmt.Printf("    %s ~/.nap directory missing\n", errorStyle.Render("[✗]"))
-		fmt.Printf("      %s\n", dimStyle.Render("run 'nap init' or deploy an app to initialize"))
+	if _, err := os.Stat(yapDir); os.IsNotExist(err) {
+		fmt.Printf("    %s ~/.yap directory missing\n", errorStyle.Render("[✗]"))
+		fmt.Printf("      %s\n", dimStyle.Render("run 'yap init' or deploy an app to initialize"))
 		return false
 	}
 
-	fmt.Printf("    %s %s exists\n", successStyle.Render("[✓]"), dimStyle.Render("~/.nap"))
+	fmt.Printf("    %s %s exists\n", successStyle.Render("[✓]"), dimStyle.Render("~/.yap"))
 
-	info, err := os.Stat(napDir)
+	info, err := os.Stat(yapDir)
 	if err != nil {
-		fmt.Printf("    %s cannot access ~/.nap\n", errorStyle.Render("[✗]"))
+		fmt.Printf("    %s cannot access ~/.yap\n", errorStyle.Render("[✗]"))
 		return false
 	}
 
 	if info.Mode().Perm()&0700 != 0700 {
-		fmt.Printf("    %s incorrect permissions on ~/.nap\n", errorStyle.Render("[!]"))
-		fmt.Printf("      %s\n", dimStyle.Render("run: chmod 700 ~/.nap"))
+		fmt.Printf("    %s incorrect permissions on ~/.yap\n", errorStyle.Render("[!]"))
+		fmt.Printf("      %s\n", dimStyle.Render("run: chmod 700 ~/.yap"))
 	} else {
 		fmt.Printf("    %s permissions correct\n", successStyle.Render("[✓]"))
 	}
@@ -135,10 +135,10 @@ func checkRegistries() bool {
 		return false
 	}
 
-	napDir := filepath.Join(homeDir, ".nap")
+	yapDir := filepath.Join(homeDir, ".yap")
 	allGood := true
 
-	appsFile := filepath.Join(napDir, "apps.json")
+	appsFile := filepath.Join(yapDir, "apps.json")
 	if _, err := os.Stat(appsFile); os.IsNotExist(err) {
 		fmt.Printf("    %s %s missing\n", errorStyle.Render("[!]"), dimStyle.Render("apps.json"))
 		fmt.Printf("      %s\n", dimStyle.Render("will be created on first app deployment"))
@@ -158,7 +158,7 @@ func checkRegistries() bool {
 		}
 	}
 
-	dbsFile := filepath.Join(napDir, "databases.json")
+	dbsFile := filepath.Join(yapDir, "databases.json")
 	if _, err := os.Stat(dbsFile); os.IsNotExist(err) {
 		fmt.Printf("    %s %s missing\n", errorStyle.Render("[!]"), dimStyle.Render("databases.json"))
 		fmt.Printf("      %s\n", dimStyle.Render("will be created on first database creation"))
@@ -178,7 +178,7 @@ func checkRegistries() bool {
 		}
 	}
 
-	vpcsFile := filepath.Join(napDir, "vpcs.json")
+	vpcsFile := filepath.Join(yapDir, "vpcs.json")
 	if _, err := os.Stat(vpcsFile); os.IsNotExist(err) {
 		fmt.Printf("    %s %s missing\n", errorStyle.Render("[!]"), dimStyle.Render("vpcs.json"))
 		fmt.Printf("      %s\n", dimStyle.Render("will be created on first vpc creation"))
@@ -217,7 +217,7 @@ func checkProxy() bool {
 	listOpts := container.ListOptions{
 		All: true,
 		Filters: filters.NewArgs(
-			filters.Arg("name", "nap-traefik"),
+			filters.Arg("name", "yap-traefik"),
 		),
 	}
 
@@ -246,7 +246,7 @@ func checkProxy() bool {
 		fmt.Printf("      %s %s\n", dimStyle.Render("image:"), dimStyle.Render(traefik.Image))
 	} else {
 		fmt.Printf("    %s proxy not running (state: %s)\n", errorStyle.Render("[✗]"), traefik.State)
-		fmt.Printf("      %s\n", dimStyle.Render("run: docker start nap-traefik"))
+		fmt.Printf("      %s\n", dimStyle.Render("run: docker start yap-traefik"))
 		fmt.Println()
 		return false
 	}
@@ -272,7 +272,7 @@ func checkVPCs() bool {
 
 	if len(vpcs) == 0 {
 		fmt.Printf("    %s no vpcs configured\n", errorStyle.Render("[!]"))
-		fmt.Printf("      %s\n", dimStyle.Render("create one with: nap vpc create primary"))
+		fmt.Printf("      %s\n", dimStyle.Render("create one with: yap vpc create primary"))
 		fmt.Println()
 		return true
 	}
@@ -322,11 +322,11 @@ func checkGlobalConfig() bool {
 		return false
 	}
 
-	configFile := filepath.Join(homeDir, ".nap", "config.toml")
+	configFile := filepath.Join(homeDir, ".yap", "config.toml")
 
 	if _, err := os.Stat(configFile); os.IsNotExist(err) {
 		fmt.Printf("    %s %s missing\n", errorStyle.Render("[!]"), dimStyle.Render("config.toml"))
-		fmt.Printf("      %s\n", dimStyle.Render("run 'nap config setup' to configure publishing"))
+		fmt.Printf("      %s\n", dimStyle.Render("run 'yap config setup' to configure publishing"))
 		fmt.Println()
 		return true
 	}

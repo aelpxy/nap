@@ -5,10 +5,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/router"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/router"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/spf13/cobra"
 )
 
@@ -164,6 +164,6 @@ func runAppRollback(cmd *cobra.Command, args []string) {
 	fmt.Println(successStyle.Render(fmt.Sprintf("  [done] rolled back to deployment #%d", targetVersion)))
 	fmt.Printf("    current image: %s\n", dimStyle.Render(imageID[:min(len(imageID), 20)]))
 	fmt.Println()
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap app deployments %s' to view history", appName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'yap app deployments %s' to view history", appName)))
 	fmt.Println()
 }

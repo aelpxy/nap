@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/utils"
 	"fmt"
 	"os"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/backup"
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/backup"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
 	"github.com/spf13/cobra"
 )
 

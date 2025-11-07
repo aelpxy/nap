@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/app"
+	"github.com/aelpxy/yap/internal/app"
 	"github.com/spf13/cobra"
 )
 
@@ -23,11 +23,11 @@ If no command is specified, opens an interactive shell (/bin/sh or /bin/bash).
 If a command is specified, runs that command interactively.
 
 Examples:
-  nap app console myapp                    # Open default shell
-  nap app console myapp /bin/bash          # Open bash shell
-  nap app console myapp node               # Open Node.js REPL
-  nap app console myapp python             # Open Python REPL
-  nap app console myapp --instance 2       # Connect to instance 2`,
+  yap app console myapp                    # Open default shell
+  yap app console myapp /bin/bash          # Open bash shell
+  yap app console myapp node               # Open Node.js REPL
+  yap app console myapp python             # Open Python REPL
+  yap app console myapp --instance 2       # Connect to instance 2`,
 	Args: cobra.RangeArgs(1, 2),
 	Run:  runAppConsole,
 }
@@ -64,7 +64,7 @@ func runAppConsole(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "%s application not found: %s\n", errorStyle.Render("[error]"), appName)
 		fmt.Println()
 		fmt.Println(dimStyle.Render("  check available apps:"))
-		fmt.Println(dimStyle.Render("    nap app list"))
+		fmt.Println(dimStyle.Render("    yap app list"))
 		os.Exit(1)
 	}
 
@@ -72,7 +72,7 @@ func runAppConsole(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "%s application is not running (status: %s)\n", errorStyle.Render("[error]"), application.Status)
 		fmt.Println()
 		fmt.Println(dimStyle.Render("  start the application first:"))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("    nap app start %s", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("    yap app start %s", appName)))
 		os.Exit(1)
 	}
 
@@ -124,7 +124,7 @@ func runAppConsole(cmd *cobra.Command, args []string) {
 		fmt.Println(dimStyle.Render("  troubleshooting:"))
 		fmt.Println(dimStyle.Render("    • check if the command exists in the container"))
 		fmt.Println(dimStyle.Render("    • try a different shell: /bin/bash or /bin/sh"))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("    • check container status: nap app status %s", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("    • check container status: yap app status %s", appName)))
 		os.Exit(1)
 	}
 

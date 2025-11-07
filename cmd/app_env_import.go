@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -107,7 +107,7 @@ func runAppEnvImport(cmd *cobra.Command, args []string) {
 
 	fmt.Println(successStyle.Render(fmt.Sprintf("  [done] imported %d environment variables", len(envVars))))
 	fmt.Println()
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'nap app restart %s' to apply changes", appName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'yap app restart %s' to apply changes", appName)))
 }
 
 func parseEnvFile(filePath string) (map[string]string, error) {

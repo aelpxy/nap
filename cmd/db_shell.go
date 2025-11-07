@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/aelpxy/nap/internal/database"
+	"github.com/aelpxy/yap/internal/database"
 	"github.com/spf13/cobra"
 )
 
@@ -18,8 +18,8 @@ For PostgreSQL databases, opens psql.
 For Valkey databases, opens redis-cli.
 
 Examples:
-  nap db shell mydb           # Open PostgreSQL shell
-  nap db shell cache          # Open Valkey shell`,
+  yap db shell mydb           # Open PostgreSQL shell
+  yap db shell cache          # Open Valkey shell`,
 	Args: cobra.ExactArgs(1),
 	Run:  runDBShell,
 }
@@ -50,7 +50,7 @@ func runDBShell(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "%s database not found: %s\n", errorStyle.Render("[error]"), dbName)
 		fmt.Println()
 		fmt.Println(dimStyle.Render("  check available databases:"))
-		fmt.Println(dimStyle.Render("    nap db list"))
+		fmt.Println(dimStyle.Render("    yap db list"))
 		os.Exit(1)
 	}
 
@@ -58,7 +58,7 @@ func runDBShell(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "%s database is not running (status: %s)\n", errorStyle.Render("[error]"), db.Status)
 		fmt.Println()
 		fmt.Println(dimStyle.Render("  start the database first:"))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("    nap db start %s", dbName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("    yap db start %s", dbName)))
 		os.Exit(1)
 	}
 

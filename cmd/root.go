@@ -48,15 +48,15 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "nap",
-	Short: "not another platform - a lightweight self-hosted PaaS",
+	Use:   "yap",
+	Short: "yet another platform - a lightweight self-hosted PaaS",
 	Long: titleStyle.Render(`
-    ____  ____ _ ____
-   / __ \/ __ `+"`"+`/ __ \
-  / / / / /_/ / /_/ /
- /_/ /_/\__,_/ .___/
-            /_/
-`) + "\n" + subtitleStyle.Render("not another platform") + "\n\n" +
+    __  __ ____ _ ____
+   / / / // __ `+"`"+`/ __ \
+  / /_/ // /_/ / /_/ /
+  \__, / \__,_/ .___/
+ /____/      /_/
+`) + "\n" + subtitleStyle.Render("yet another platform") + "\n\n" +
 		"A barebones PaaS alternative for self-hosting your projects.",
 	Version: "0.1.0",
 }

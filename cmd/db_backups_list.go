@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/utils"
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/backup"
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/backup"
+	"github.com/aelpxy/yap/internal/docker"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/spf13/cobra"
@@ -48,7 +48,7 @@ func runBackupsList(cmd *cobra.Command, args []string) {
 			fmt.Println(dimStyle.Render("no backups found"))
 		}
 		fmt.Println()
-		fmt.Println(dimStyle.Render("create a backup with: nap db backup <name>"))
+		fmt.Println(dimStyle.Render("create a backup with: yap db backup <name>"))
 		return
 	}
 
@@ -120,8 +120,8 @@ func runBackupsList(cmd *cobra.Command, args []string) {
 	fmt.Println()
 
 	fmt.Println(dimStyle.Render("  commands:"))
-	fmt.Printf("    %s\n", dimStyle.Render("nap db restore <name> <id>      # restore backup"))
-	fmt.Printf("    %s\n", dimStyle.Render("nap db backups delete <id>      # delete backup"))
+	fmt.Printf("    %s\n", dimStyle.Render("yap db restore <name> <id>      # restore backup"))
+	fmt.Printf("    %s\n", dimStyle.Render("yap db backups delete <id>      # delete backup"))
 	fmt.Println()
 }
 

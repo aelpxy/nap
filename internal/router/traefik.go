@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/config"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/config"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/api/types/mount"
@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	traefikContainerName = "nap-traefik"
+	traefikContainerName = "yap-traefik"
 	traefikImage         = "traefik:v3.5"
 )
 
@@ -92,8 +92,8 @@ func (t *TraefikManager) Start(output io.Writer) error {
 	containerConfig := &container.Config{
 		Image: traefikImage,
 		Labels: map[string]string{
-			"nap.managed": "true",
-			"nap.type":    "traefik",
+			"yap.managed": "true",
+			"yap.type":    "traefik",
 		},
 		ExposedPorts: nat.PortSet{
 			"80/tcp":   struct{}{},
@@ -197,21 +197,21 @@ func (t *TraefikManager) generateConfig() (string, error) {
 		return "", err
 	}
 
-	napDir := filepath.Join(homeDir, ".nap")
-	if err := os.MkdirAll(napDir, 0755); err != nil {
+	yapDir := filepath.Join(homeDir, ".yap")
+	if err := os.MkdirAll(yapDir, 0755); err != nil {
 		return "", err
 	}
 
-	letsencryptDir := filepath.Join(napDir, "letsencrypt")
+	letsencryptDir := filepath.Join(yapDir, "letsencrypt")
 	if err := os.MkdirAll(letsencryptDir, 0755); err != nil {
 		return "", err
 	}
 
-	configPath := filepath.Join(napDir, "traefik.yml")
+	configPath := filepath.Join(yapDir, "traefik.yml")
 
 	t.letsencryptDir = letsencryptDir
 
-	acmeEmail := "nap@localhost"
+	acmeEmail := "yap@localhost"
 	configManager, err := loadGlobalConfig()
 	if err == nil && configManager != nil {
 		config := configManager.GetConfig()
@@ -220,7 +220,7 @@ func (t *TraefikManager) generateConfig() (string, error) {
 		}
 	}
 
-	config := fmt.Sprintf(`# Traefik configuration for nap
+	config := fmt.Sprintf(`# Traefik configuration for yap
 entryPoints:
   web:
     address: ":80"
@@ -321,7 +321,7 @@ func (t *TraefikManager) GenerateLabelsForApp(app *models.Application) map[strin
 		labels["traefik.http.middlewares.redirect-to-https.redirectscheme.scheme"] = "https"
 		labels["traefik.http.middlewares.redirect-to-https.redirectscheme.permanent"] = "true"
 	} else {
-		labels[fmt.Sprintf("traefik.http.routers.%s.rule", app.Name)] = fmt.Sprintf("Host(`%s.nap.local`)", app.Name)
+		labels[fmt.Sprintf("traefik.http.routers.%s.rule", app.Name)] = fmt.Sprintf("Host(`%s.yap.local`)", app.Name)
 		labels[fmt.Sprintf("traefik.http.routers.%s.entrypoints", app.Name)] = "web"
 	}
 

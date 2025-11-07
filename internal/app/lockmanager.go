@@ -20,7 +20,7 @@ func GetGlobalLockManager() *LockManager {
 		if err != nil {
 			homeDir = "."
 		}
-		lockDir := filepath.Join(homeDir, ".nap", "locks")
+		lockDir := filepath.Join(homeDir, ".yap", "locks")
 		os.MkdirAll(lockDir, 0755)
 
 		globalLockManager = &LockManager{

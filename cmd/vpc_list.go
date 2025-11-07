@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/database"
+	"github.com/aelpxy/yap/internal/database"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/spf13/cobra"
@@ -38,7 +38,7 @@ func runVPCList(cmd *cobra.Command, args []string) {
 	if len(vpcs) == 0 {
 		fmt.Println(dimStyle.Render("no vpcs found"))
 		fmt.Println()
-		fmt.Println(dimStyle.Render("create a vpc with: nap vpc create <name>"))
+		fmt.Println(dimStyle.Render("create a vpc with: yap vpc create <name>"))
 		return
 	}
 

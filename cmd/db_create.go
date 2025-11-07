@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/constants"
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/utils"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/constants"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/utils"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/spf13/cobra"
 )
 
@@ -129,13 +129,13 @@ func runCreate(cmd *cobra.Command, args []string) {
 	fmt.Println()
 
 	fmt.Println(dimStyle.Render("  [info] this database is private and only accessible within the vpc"))
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  [info] to expose to host: nap db publish %s --port <port>", dbName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  [info] to expose to host: yap db publish %s --port <port>", dbName)))
 	fmt.Println()
 
 	fmt.Println(dimStyle.Render("  next steps:"))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap db credentials %s  # view credentials", dbName)))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap db logs %s          # view logs", dbName)))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap db publish %s --port 5432  # publish to host", dbName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap db credentials %s  # view credentials", dbName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap db logs %s          # view logs", dbName)))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap db publish %s --port 5432  # publish to host", dbName)))
 	fmt.Println()
 }
 

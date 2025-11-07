@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -49,7 +49,7 @@ func runAppEnvList(cmd *cobra.Command, args []string) {
 	if len(application.EnvVars) == 0 {
 		fmt.Println(dimStyle.Render("  no environment variables set"))
 		fmt.Println()
-		fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap app env set %s KEY=value' to add variables", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'yap app env set %s KEY=value' to add variables", appName)))
 		return
 	}
 
@@ -76,6 +76,6 @@ func runAppEnvList(cmd *cobra.Command, args []string) {
 	fmt.Println()
 	fmt.Println(dimStyle.Render(fmt.Sprintf("  total: %d variables", len(application.EnvVars))))
 	fmt.Println()
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap app env set %s KEY=value' to add variables", appName)))
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap app env unset %s KEY' to remove variables", appName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'yap app env set %s KEY=value' to add variables", appName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'yap app env unset %s KEY' to remove variables", appName)))
 }

@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/pkg/models"
 )
 
 type DeploymentStrategy interface {

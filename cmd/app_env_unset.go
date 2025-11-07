@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
+	"github.com/aelpxy/yap/internal/app"
 	"github.com/spf13/cobra"
 )
 
@@ -75,5 +75,5 @@ func runAppEnvUnset(cmd *cobra.Command, args []string) {
 	fmt.Println()
 	fmt.Println(successStyle.Render(fmt.Sprintf("  [done] removed %d environment variable(s)", removedCount)))
 	fmt.Println()
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'nap app restart %s' to apply changes", appName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'yap app restart %s' to apply changes", appName)))
 }

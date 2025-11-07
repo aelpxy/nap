@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/database"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/database"
 	"github.com/spf13/cobra"
 )
 
@@ -46,7 +46,7 @@ func runAppDatabases(cmd *cobra.Command, args []string) {
 	if len(application.LinkedDatabases) == 0 {
 		fmt.Println(dimStyle.Render("  no databases linked"))
 		fmt.Println()
-		fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap app link %s <db-name>' to link a database", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'yap app link %s <db-name>' to link a database", appName)))
 		return
 	}
 
@@ -85,5 +85,5 @@ func runAppDatabases(cmd *cobra.Command, args []string) {
 	fmt.Println()
 	fmt.Println(dimStyle.Render(fmt.Sprintf("  total: %d database(s)", len(application.LinkedDatabases))))
 	fmt.Println()
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap app env list %s' to view all environment variables", appName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'yap app env list %s' to view all environment variables", appName)))
 }

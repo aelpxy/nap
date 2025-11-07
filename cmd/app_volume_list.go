@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/docker"
 	"github.com/spf13/cobra"
 )
 
@@ -58,7 +58,7 @@ func runAppVolumeList(cmd *cobra.Command, args []string) {
 		fmt.Println(dimStyle.Render("  no volumes configured"))
 		fmt.Println()
 		fmt.Println(infoStyle.Render("  [info] the container filesystem is ephemeral. use volumes for persistent data."))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'nap app volume add %s <name> <path>' to add a volume", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'yap app volume add %s <name> <path>' to add a volume", appName)))
 		return
 	}
 

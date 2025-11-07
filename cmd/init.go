@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/builder"
+	"github.com/aelpxy/yap/internal/builder"
 	"github.com/spf13/cobra"
 )
 
@@ -18,19 +18,19 @@ var (
 
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "Initialize a new nap project",
-	Long:  "Create a nap.toml configuration file in the current directory",
+	Short: "Initialize a new yap project",
+	Long:  "Create a yap.toml configuration file in the current directory",
 	Run:   runInit,
 }
 
 func runInit(cmd *cobra.Command, args []string) {
-	if _, err := os.Stat("nap.toml"); err == nil {
-		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] nap.toml already exists"))
-		fmt.Println(dimStyle.Render("  use 'nap.toml' to configure your deployment"))
+	if _, err := os.Stat("yap.toml"); err == nil {
+		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] yap.toml already exists"))
+		fmt.Println(dimStyle.Render("  use 'yap.toml' to configure your deployment"))
 		os.Exit(1)
 	}
 
-	fmt.Println(titleStyle.Render("==> initializing nap project"))
+	fmt.Println(titleStyle.Render("==> initializing yap project"))
 	fmt.Println()
 
 	cwd, err := os.Getwd()
@@ -75,16 +75,16 @@ func runInit(cmd *cobra.Command, args []string) {
 		config = generateMinimalConfig(appName, language, port)
 	}
 
-	if err := os.WriteFile("nap.toml", []byte(config), 0644); err != nil {
-		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("[error] failed to write nap.toml: %v", err)))
+	if err := os.WriteFile("yap.toml", []byte(config), 0644); err != nil {
+		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("[error] failed to write yap.toml: %v", err)))
 		os.Exit(1)
 	}
 
-	fmt.Println(successStyle.Render("  [done] nap.toml created"))
+	fmt.Println(successStyle.Render("  [done] yap.toml created"))
 	fmt.Println()
 	fmt.Println(labelStyle.Render("  next steps:"))
-	fmt.Printf("    %s\n", dimStyle.Render("1. review and customize nap.toml"))
-	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("2. deploy with: nap app deploy %s", appName)))
+	fmt.Printf("    %s\n", dimStyle.Render("1. review and customize yap.toml"))
+	fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("2. deploy with: yap app deploy %s", appName)))
 	fmt.Println()
 }
 
@@ -112,11 +112,11 @@ func generateMinimalConfig(name, runtime string, port int) string {
 		runtimeValue = "docker"
 	}
 
-	return fmt.Sprintf(`# nap.toml - Minimal configuration
+	return fmt.Sprintf(`# yap.toml - Minimal configuration
 
 [app]
 name = "%s"
-region = "us-east-1"
+region = "local"
 runtime = "%s"
 env = "production"
 
@@ -163,11 +163,11 @@ func generateFullConfig(name, runtime string, port int) string {
 		runtimeValue = "docker"
 	}
 
-	return fmt.Sprintf(`# nap.toml - Full configuration
+	return fmt.Sprintf(`# yap.toml - Full configuration
 
 [app]
 name = "%s"
-region = "us-east-1"
+region = "local"
 runtime = "%s"  # nodejs, python, go, rust, ruby, php, java, docker
 env = "production"  # production, staging, development
 
@@ -209,7 +209,7 @@ cpu_limit = 1.0
 [network]
 # Network configuration
 ssl = false                # Auto-provision SSL certificate
-domain = "%s.nap.local"    # Custom domain
+domain = "%s.yap.local"    # Custom domain
 internal_only = false      # Only accessible internally
 
 [env]
@@ -219,7 +219,7 @@ LOG_LEVEL = "info"
 
 [database]
 # Database connections (optional)
-# These are auto-populated when using 'nap app link'
+# These are auto-populated when using 'yap app link'
 # postgres = "db-abc123"
 # valkey = "cache-xyz789"
 

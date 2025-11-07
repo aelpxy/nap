@@ -12,11 +12,11 @@ func (c *Client) CreateVolume(volumeName string, dbType string, dbName string, d
 		Name:   volumeName,
 		Driver: "local",
 		Labels: map[string]string{
-			"nap.managed": "true",
-			"nap.type":    "database",
-			"nap.db.type": dbType,
-			"nap.db.name": dbName,
-			"nap.db.id":   dbID,
+			"yap.managed": "true",
+			"yap.type":    "database",
+			"yap.db.type": dbType,
+			"yap.db.name": dbName,
+			"yap.db.id":   dbID,
 		},
 	})
 

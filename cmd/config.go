@@ -6,16 +6,16 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/config"
-	"github.com/aelpxy/nap/internal/utils"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/config"
+	"github.com/aelpxy/yap/internal/utils"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/spf13/cobra"
 )
 
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "manage nap configuration",
-	Long:  "manage global nap configuration settings",
+	Short: "manage yap configuration",
+	Long:  "manage global yap configuration settings",
 }
 
 var configSetupCmd = &cobra.Command{
@@ -34,7 +34,7 @@ var configSetupCmd = &cobra.Command{
 		fmt.Println()
 		fmt.Println(titleStyle.Render("==> publishing configuration"))
 		fmt.Println()
-		fmt.Println("  " + dimStyle.Render("this will configure nap to publish apps with https using let's encrypt"))
+		fmt.Println("  " + dimStyle.Render("this will configure yap to publish apps with https using let's encrypt"))
 		fmt.Println("  " + dimStyle.Render("you'll need:"))
 		fmt.Println("    " + dimStyle.Render("• a domain you control"))
 		fmt.Println("    " + dimStyle.Render("• dns access to create records"))
@@ -60,7 +60,7 @@ var configSetupCmd = &cobra.Command{
 
 		fmt.Println()
 		fmt.Println("  base domain for published apps")
-		fmt.Println("  " + dimStyle.Render("apps will be accessible at {app}.nap.{base-domain}"))
+		fmt.Println("  " + dimStyle.Render("apps will be accessible at {app}.yap.{base-domain}"))
 		fmt.Print("  enter domain (e.g., example.com): ")
 		domainInput, _ := reader.ReadString('\n')
 		domainInput = strings.TrimSpace(domainInput)
@@ -97,7 +97,7 @@ var configSetupCmd = &cobra.Command{
 		fmt.Println(successStyle.Render("  [done]") + " publishing configured")
 		fmt.Println()
 		fmt.Println("  " + dimStyle.Render("apps will be published to:"))
-		fmt.Println("  " + infoStyle.Render(fmt.Sprintf("https://{app}.nap.%s", domainInput)))
+		fmt.Println("  " + infoStyle.Render(fmt.Sprintf("https://{app}.yap.%s", domainInput)))
 		fmt.Println()
 
 		fmt.Println(titleStyle.Render("==> next steps"))
@@ -106,16 +106,16 @@ var configSetupCmd = &cobra.Command{
 		publicIP, err := utils.GetPublicIP()
 		if err != nil {
 			fmt.Println("  " + dimStyle.Render("1. configure wildcard dns:"))
-			fmt.Println("  " + infoStyle.Render(fmt.Sprintf("     *.nap.%s  →  <your server ip>", domainInput)))
+			fmt.Println("  " + infoStyle.Render(fmt.Sprintf("     *.yap.%s  →  <your server ip>", domainInput)))
 		} else {
 			fmt.Println("  " + dimStyle.Render("server ip detected:") + " " + successStyle.Render(publicIP))
 			fmt.Println()
 			fmt.Println("  " + dimStyle.Render("1. configure wildcard dns in your dns provider:"))
-			fmt.Println("  " + infoStyle.Render(fmt.Sprintf("     *.nap.%s  →  %s", domainInput, publicIP)))
+			fmt.Println("  " + infoStyle.Render(fmt.Sprintf("     *.yap.%s  →  %s", domainInput, publicIP)))
 			fmt.Println()
 			fmt.Println("  " + dimStyle.Render("   example dns record:"))
 			fmt.Println("    " + dimStyle.Render("   type: A"))
-			fmt.Println("    " + dimStyle.Render(fmt.Sprintf("   name: *.nap.%s", domainInput)))
+			fmt.Println("    " + dimStyle.Render(fmt.Sprintf("   name: *.yap.%s", domainInput)))
 			fmt.Println("    " + dimStyle.Render(fmt.Sprintf("   value: %s", publicIP)))
 		}
 
@@ -123,7 +123,7 @@ var configSetupCmd = &cobra.Command{
 		fmt.Println("  " + dimStyle.Render("2. ensure ports 80 and 443 are open in your firewall"))
 		fmt.Println()
 		fmt.Println("  " + dimStyle.Render("3. publish an app:"))
-		fmt.Println("  " + infoStyle.Render("     nap app publish <app-name>"))
+		fmt.Println("  " + infoStyle.Render("     yap app publish <app-name>"))
 		fmt.Println()
 		fmt.Println("  " + dimStyle.Render("4. ssl certificates will be issued automatically on first access"))
 	},
@@ -132,7 +132,7 @@ var configSetupCmd = &cobra.Command{
 var configShowCmd = &cobra.Command{
 	Use:   "show",
 	Short: "display current configuration",
-	Long:  "show current nap configuration settings",
+	Long:  "show current yap configuration settings",
 	Run: func(cmd *cobra.Command, args []string) {
 		configManager, err := config.NewConfigManager()
 		if err != nil {
@@ -143,7 +143,7 @@ var configShowCmd = &cobra.Command{
 		cfg := configManager.GetConfig()
 
 		fmt.Println()
-		fmt.Println(titleStyle.Render("==> nap configuration"))
+		fmt.Println(titleStyle.Render("==> yap configuration"))
 		fmt.Println()
 
 		fmt.Println("  " + labelStyle.Render("publishing:"))
@@ -153,11 +153,11 @@ var configShowCmd = &cobra.Command{
 			fmt.Println("    email: " + infoStyle.Render(cfg.Publishing.Email))
 			fmt.Println()
 			fmt.Println("    " + dimStyle.Render("apps publish to:"))
-			fmt.Println("    " + dimStyle.Render(fmt.Sprintf("https://{app}.nap.%s", cfg.Publishing.BaseDomain)))
+			fmt.Println("    " + dimStyle.Render(fmt.Sprintf("https://{app}.yap.%s", cfg.Publishing.BaseDomain)))
 		} else {
 			fmt.Println("    enabled: " + dimStyle.Render("false"))
 			fmt.Println()
-			fmt.Println("    " + dimStyle.Render("run 'nap config setup' to enable publishing"))
+			fmt.Println("    " + dimStyle.Render("run 'yap config setup' to enable publishing"))
 		}
 	},
 }

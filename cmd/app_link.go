@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
 	"github.com/spf13/cobra"
 )
 
@@ -54,8 +54,8 @@ func runAppLink(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "%s application not found: %s\n", errorStyle.Render("[error]"), appName)
 		fmt.Println()
 		fmt.Println(dimStyle.Render("  try one of these:"))
-		fmt.Println(dimStyle.Render("    nap app list              # see all applications"))
-		fmt.Println(dimStyle.Render("    nap app deploy myapp .    # deploy new application"))
+		fmt.Println(dimStyle.Render("    yap app list              # see all applications"))
+		fmt.Println(dimStyle.Render("    yap app deploy myapp .    # deploy new application"))
 		os.Exit(1)
 	}
 
@@ -64,8 +64,8 @@ func runAppLink(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "%s database not found: %s\n", errorStyle.Render("[error]"), dbName)
 		fmt.Println()
 		fmt.Println(dimStyle.Render("  try one of these:"))
-		fmt.Println(dimStyle.Render("    nap db list                           # see all databases"))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("    nap db create postgres %s --vpc %s   # create new database", dbName, application.VPC)))
+		fmt.Println(dimStyle.Render("    yap db list                           # see all databases"))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("    yap db create postgres %s --vpc %s   # create new database", dbName, application.VPC)))
 		os.Exit(1)
 	}
 
@@ -82,8 +82,8 @@ func runAppLink(cmd *cobra.Command, args []string) {
 			fmt.Printf("    database '%s' is in vpc: %s\n", valueStyle.Render(dbName), errorStyle.Render(db.VPC))
 			fmt.Println()
 			fmt.Println(dimStyle.Render("  to fix this, either:"))
-			fmt.Println(dimStyle.Render(fmt.Sprintf("    1. redeploy app to same vpc: nap app deploy %s . --vpc %s", appName, db.VPC)))
-			fmt.Println(dimStyle.Render(fmt.Sprintf("    2. create new database in app vpc: nap db create %s newdb --vpc %s", db.Type, application.VPC)))
+			fmt.Println(dimStyle.Render(fmt.Sprintf("    1. redeploy app to same vpc: yap app deploy %s . --vpc %s", appName, db.VPC)))
+			fmt.Println(dimStyle.Render(fmt.Sprintf("    2. create new database in app vpc: yap db create %s newdb --vpc %s", db.Type, application.VPC)))
 		}
 		os.Exit(1)
 	}

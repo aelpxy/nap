@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/runtime"
+	"github.com/aelpxy/yap/internal/runtime"
 	"github.com/spf13/cobra"
 )
 
@@ -19,15 +19,15 @@ var daemonStartCmd = &cobra.Command{
 	Short: "Start the container runtime daemon",
 	Long: `Start the container runtime daemon (Podman API service).
 
-This command starts the Podman API service, which allows nap to communicate with Podman
+This command starts the Podman API service, which allows yap to communicate with Podman
 using the Docker-compatible API. The service runs in the background and persists across
 system restarts (if systemd is available).
 
 For rootless Podman, the service runs as your user without requiring root privileges.
 
 Examples:
-  nap daemon start              # Start Podman service
-  nap daemon start --enable-linger  # Enable systemd user services at boot`,
+  yap daemon start              # Start Podman service
+  yap daemon start --enable-linger  # Enable systemd user services at boot`,
 	Run: runDaemonStart,
 }
 
@@ -37,10 +37,10 @@ var daemonStopCmd = &cobra.Command{
 	Long: `Stop the container runtime daemon (Podman API service).
 
 This stops the Podman API service. All running containers will continue to run,
-but nap commands will not work until the service is restarted.
+but yap commands will not work until the service is restarted.
 
 Examples:
-  nap daemon stop`,
+  yap daemon stop`,
 	Run: runDaemonStop,
 }
 
@@ -53,7 +53,7 @@ Displays information about the detected runtime (Docker or Podman), version,
 socket location, and whether the service is running.
 
 Examples:
-  nap daemon status`,
+  yap daemon status`,
 	Run: runDaemonStatus,
 }
 
@@ -150,7 +150,7 @@ func runDaemonStop(cmd *cobra.Command, args []string) {
 	fmt.Println()
 
 	if runtimeInfo.Type == runtime.RuntimeDocker {
-		fmt.Println(dimStyle.Render("  docker daemon cannot be stopped via nap"))
+		fmt.Println(dimStyle.Render("  docker daemon cannot be stopped via yap"))
 		fmt.Println()
 		fmt.Println(dimStyle.Render("  use systemctl or docker desktop to manage the docker daemon"))
 		return
@@ -166,8 +166,8 @@ func runDaemonStop(cmd *cobra.Command, args []string) {
 
 	fmt.Println(successStyle.Render("  [done] podman daemon stopped"))
 	fmt.Println()
-	fmt.Println(dimStyle.Render("  note: all containers continue running, but nap commands won't work"))
-	fmt.Println(dimStyle.Render("  run 'nap daemon start' to restart the service"))
+	fmt.Println(dimStyle.Render("  note: all containers continue running, but yap commands won't work"))
+	fmt.Println(dimStyle.Render("  run 'yap daemon start' to restart the service"))
 	fmt.Println()
 }
 
@@ -212,12 +212,12 @@ func runDaemonStatus(cmd *cobra.Command, args []string) {
 
 	if !isRunning && runtimeInfo.Type == runtime.RuntimePodman {
 		fmt.Println(dimStyle.Render("  start the daemon:"))
-		fmt.Println(dimStyle.Render("    nap daemon start"))
+		fmt.Println(dimStyle.Render("    yap daemon start"))
 		fmt.Println()
 	}
 
 	if isRunning {
-		fmt.Println(successStyle.Render("  [ready] nap is ready to use"))
+		fmt.Println(successStyle.Render("  [ready] yap is ready to use"))
 		fmt.Println()
 	}
 }

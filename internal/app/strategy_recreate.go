@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/docker"
 	dockerTypes "github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
 )
@@ -79,15 +79,15 @@ func (s *RecreateStrategy) Deploy(opts DeploymentOptions) (string, error) {
 }
 
 func (s *RecreateStrategy) createInstance(ctx context.Context, opts DeploymentOptions, instanceNum int) (string, error) {
-	containerName := fmt.Sprintf("nap-app-%s-%d", opts.App.Name, instanceNum)
+	containerName := fmt.Sprintf("yap-app-%s-%d", opts.App.Name, instanceNum)
 
 	labels := map[string]string{
-		"nap.managed":      "true",
-		"nap.type":         "app",
-		"nap.app.name":     opts.App.Name,
-		"nap.app.id":       opts.App.ID,
-		"nap.vpc":          opts.VPCName,
-		"nap.app.instance": fmt.Sprintf("%d", instanceNum),
+		"yap.managed":      "true",
+		"yap.type":         "app",
+		"yap.app.name":     opts.App.Name,
+		"yap.app.id":       opts.App.ID,
+		"yap.vpc":          opts.VPCName,
+		"yap.app.instance": fmt.Sprintf("%d", instanceNum),
 	}
 	for k, v := range opts.TraefikLabels {
 		labels[k] = v
@@ -97,7 +97,7 @@ func (s *RecreateStrategy) createInstance(ctx context.Context, opts DeploymentOp
 	for k, v := range opts.App.EnvVars {
 		envVars[k] = v
 	}
-	InjectNapMetadata(envVars, opts.App.ID, instanceNum, "local")
+	InjectMetadata(envVars, opts.App.ID, instanceNum, "local")
 	envArray := BuildEnvArray(envVars)
 
 	containerConfig := &dockerTypes.Config{
@@ -119,7 +119,7 @@ func (s *RecreateStrategy) createInstance(ctx context.Context, opts DeploymentOp
 		Mounts: mounts,
 	}
 
-	vpcNetworkName := fmt.Sprintf("%s.nap-vpc-network", opts.VPCName)
+	vpcNetworkName := fmt.Sprintf("%s.yap-vpc-network", opts.VPCName)
 	networkConfig := &network.NetworkingConfig{
 		EndpointsConfig: map[string]*network.EndpointSettings{
 			vpcNetworkName: {},

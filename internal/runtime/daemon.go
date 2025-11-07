@@ -154,7 +154,7 @@ func (dm *DaemonManager) startPodmanManual() error {
 		return fmt.Errorf("failed to start podman service: %w", err)
 	}
 
-	pidFile := filepath.Join(os.TempDir(), "nap-podman-service.pid")
+	pidFile := filepath.Join(os.TempDir(), "yap-podman-service.pid")
 	if err := os.WriteFile(pidFile, []byte(fmt.Sprintf("%d", cmd.Process.Pid)), 0644); err != nil {
 		return fmt.Errorf("failed to write PID file: %w", err)
 	}
@@ -170,7 +170,7 @@ func (dm *DaemonManager) startPodmanManual() error {
 }
 
 func (dm *DaemonManager) stopPodmanManual() error {
-	pidFile := filepath.Join(os.TempDir(), "nap-podman-service.pid")
+	pidFile := filepath.Join(os.TempDir(), "yap-podman-service.pid")
 
 	data, err := os.ReadFile(pidFile)
 	if err != nil {

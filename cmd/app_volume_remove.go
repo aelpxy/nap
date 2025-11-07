@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/docker"
 	"github.com/spf13/cobra"
 )
 
@@ -22,8 +22,8 @@ var appVolumeRemoveCmd = &cobra.Command{
 By default, the volume data is preserved. Use --delete-data to remove the data.
 
 Examples:
-  nap app volume remove myapp data
-  nap app volume remove myapp uploads --delete-data`,
+  yap app volume remove myapp data
+  yap app volume remove myapp uploads --delete-data`,
 	Args: cobra.ExactArgs(2),
 	Run:  runAppVolumeRemove,
 }
@@ -96,5 +96,5 @@ func runAppVolumeRemove(cmd *cobra.Command, args []string) {
 	fmt.Println()
 
 	fmt.Println(infoStyle.Render("  [info] redeploy app to unmount the volume"))
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'nap app deploy %s' to apply changes", appName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'yap app deploy %s' to apply changes", appName)))
 }

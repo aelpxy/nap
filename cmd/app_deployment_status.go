@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/utils"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/utils"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/spf13/cobra"
 )
 
@@ -83,8 +83,8 @@ func runAppDeploymentStatus(cmd *cobra.Command, args []string) {
 
 		if application.DeploymentState.Standby != "" && application.DeploymentState.Standby != models.DeploymentColorDefault {
 			fmt.Println(labelStyle.Render("  available actions:"))
-			fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap app deployment confirm %s   # destroy %s environment", appName, application.DeploymentState.Standby)))
-			fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("nap app deployment rollback %s  # switch back to %s", appName, application.DeploymentState.Standby)))
+			fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap app deployment confirm %s   # destroy %s environment", appName, application.DeploymentState.Standby)))
+			fmt.Printf("    %s\n", dimStyle.Render(fmt.Sprintf("yap app deployment rollback %s  # switch back to %s", appName, application.DeploymentState.Standby)))
 			fmt.Println()
 		}
 	} else {

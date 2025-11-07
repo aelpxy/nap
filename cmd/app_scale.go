@@ -5,9 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
 	"github.com/spf13/cobra"
 )
 
@@ -54,9 +54,9 @@ func runAppScale(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "%s must specify --instances, --add, or --remove\n", errorStyle.Render("[error]"))
 		fmt.Println()
 		fmt.Println(dimStyle.Render("  usage examples:"))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("    nap app scale %s --instances 3   # scale to exactly 3 instances", appName)))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("    nap app scale %s --add 2         # add 2 more instances", appName)))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("    nap app scale %s --remove 1      # remove 1 instance", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("    yap app scale %s --instances 3   # scale to exactly 3 instances", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("    yap app scale %s --add 2         # add 2 more instances", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("    yap app scale %s --remove 1      # remove 1 instance", appName)))
 		os.Exit(1)
 	}
 	if flagsSet > 1 {
@@ -102,7 +102,7 @@ func runAppScale(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "%s application not found: %s\n", errorStyle.Render("[error]"), appName)
 		fmt.Println()
 		fmt.Println(dimStyle.Render("  check available apps:"))
-		fmt.Println(dimStyle.Render("    nap app list"))
+		fmt.Println(dimStyle.Render("    yap app list"))
 		os.Exit(1)
 	}
 
@@ -124,7 +124,7 @@ func runAppScale(cmd *cobra.Command, args []string) {
 		fmt.Printf("  requested change would result in: %s\n", errorStyle.Render(fmt.Sprintf("%d instances", targetInstances)))
 		fmt.Println()
 		fmt.Println(dimStyle.Render("  minimum is 1 instance. to remove the app entirely, use:"))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("    nap app destroy %s", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("    yap app destroy %s", appName)))
 		os.Exit(1)
 	}
 

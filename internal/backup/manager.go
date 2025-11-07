@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 )
 
 type Manager struct {
@@ -31,7 +31,7 @@ func NewManager(dockerClient *docker.Client) (*Manager, error) {
 		return nil, fmt.Errorf("failed to get home directory: %w", err)
 	}
 
-	backupsDir := filepath.Join(homeDir, ".nap", "backups")
+	backupsDir := filepath.Join(homeDir, ".yap", "backups")
 
 	return &Manager{
 		registry:     registry,

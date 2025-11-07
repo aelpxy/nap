@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/constants"
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/constants"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -87,7 +87,7 @@ func runVPCCreate(cmd *cobra.Command, args []string) {
 	fmt.Printf("    %s %s\n", dimStyle.Render("network:"), valueStyle.Render(vpc.NetworkName))
 	fmt.Printf("    %s %s\n", dimStyle.Render("subnet:"), valueStyle.Render(vpc.Subnet))
 	fmt.Println()
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap db create <type> <name> --vpc %s' to create databases in this vpc", vpcName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'yap db create <type> <name> --vpc %s' to create databases in this vpc", vpcName)))
 }
 
 func init() {

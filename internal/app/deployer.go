@@ -3,7 +3,7 @@ package app
 import (
 	"fmt"
 
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/pkg/models"
 )
 
 type Deployer struct {

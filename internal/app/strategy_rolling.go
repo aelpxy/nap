@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/aelpxy/nap/internal/docker"
+	"github.com/aelpxy/yap/internal/docker"
 	dockerTypes "github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
 )
@@ -147,18 +147,18 @@ func (s *RollingStrategy) Deploy(opts DeploymentOptions) (string, error) {
 func (s *RollingStrategy) createInstance(ctx context.Context, opts DeploymentOptions, instanceNum int) (string, error) {
 	var containerName string
 	if len(opts.App.ContainerIDs) > 0 {
-		containerName = fmt.Sprintf("nap-app-%s-%d-%d", opts.App.Name, instanceNum, time.Now().Unix())
+		containerName = fmt.Sprintf("yap-app-%s-%d-%d", opts.App.Name, instanceNum, time.Now().Unix())
 	} else {
-		containerName = fmt.Sprintf("nap-app-%s-%d", opts.App.Name, instanceNum)
+		containerName = fmt.Sprintf("yap-app-%s-%d", opts.App.Name, instanceNum)
 	}
 
 	labels := map[string]string{
-		"nap.managed":      "true",
-		"nap.type":         "app",
-		"nap.app.name":     opts.App.Name,
-		"nap.app.id":       opts.App.ID,
-		"nap.vpc":          opts.VPCName,
-		"nap.app.instance": fmt.Sprintf("%d", instanceNum),
+		"yap.managed":      "true",
+		"yap.type":         "app",
+		"yap.app.name":     opts.App.Name,
+		"yap.app.id":       opts.App.ID,
+		"yap.vpc":          opts.VPCName,
+		"yap.app.instance": fmt.Sprintf("%d", instanceNum),
 	}
 	for k, v := range opts.TraefikLabels {
 		labels[k] = v
@@ -168,7 +168,7 @@ func (s *RollingStrategy) createInstance(ctx context.Context, opts DeploymentOpt
 	for k, v := range opts.App.EnvVars {
 		envVars[k] = v
 	}
-	InjectNapMetadata(envVars, opts.App.ID, instanceNum, "local")
+	InjectMetadata(envVars, opts.App.ID, instanceNum, "local")
 	envArray := BuildEnvArray(envVars)
 
 	containerConfig := &dockerTypes.Config{
@@ -190,7 +190,7 @@ func (s *RollingStrategy) createInstance(ctx context.Context, opts DeploymentOpt
 		Mounts: mounts,
 	}
 
-	vpcNetworkName := fmt.Sprintf("%s.nap-vpc-network", opts.VPCName)
+	vpcNetworkName := fmt.Sprintf("%s.yap-vpc-network", opts.VPCName)
 	networkConfig := &network.NetworkingConfig{
 		EndpointsConfig: map[string]*network.EndpointSettings{
 			vpcNetworkName: {},
@@ -226,7 +226,7 @@ func (s *RollingStrategy) waitForHealthy(ctx context.Context, containerID string
 		Timeout: 3 * time.Second,
 	}
 
-	vpcNetworkName := fmt.Sprintf("%s.nap-vpc-network", opts.VPCName)
+	vpcNetworkName := fmt.Sprintf("%s.yap-vpc-network", opts.VPCName)
 
 	for {
 		select {

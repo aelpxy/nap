@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/aelpxy/nap/internal/app"
+	"github.com/aelpxy/yap/internal/app"
 	"github.com/spf13/cobra"
 )
 

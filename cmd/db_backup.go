@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/backup"
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/backup"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -103,7 +103,7 @@ func runBackup(cmd *cobra.Command, args []string) {
 	}
 	fmt.Println()
 
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  restore with: nap db restore %s %s", dbName, bkp.ID)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  restore with: yap db restore %s %s", dbName, bkp.ID)))
 	fmt.Println()
 }
 

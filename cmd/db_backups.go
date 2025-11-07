@@ -7,7 +7,7 @@ import (
 var backupsCmd = &cobra.Command{
 	Use:   "backups",
 	Short: "Manage database backups",
-	Long:  "Manage database backups for nap databases",
+	Long:  "Manage database backups for yap databases",
 }
 
 func init() {

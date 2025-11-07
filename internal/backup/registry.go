@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/utils"
 )
 
 type BackupRegistry struct {
@@ -21,7 +21,7 @@ func NewBackupRegistry() (*BackupRegistry, error) {
 		return nil, fmt.Errorf("failed to get home directory: %w", err)
 	}
 
-	registryPath := filepath.Join(homeDir, ".nap", "backups", "registry.json")
+	registryPath := filepath.Join(homeDir, ".yap", "backups", "registry.json")
 
 	return &BackupRegistry{
 		Backups: []Backup{},

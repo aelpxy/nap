@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 )
@@ -34,8 +34,8 @@ func NewPostgresProvisioner(dockerClient *docker.Client, registry *RegistryManag
 
 func (p *PostgresProvisioner) Provision(name string, password string, vpc string) (*models.Database, error) {
 	dbID := GenerateID("db")
-	containerName := fmt.Sprintf("nap-db-%s", name)
-	volumeName := fmt.Sprintf("nap-vol-%s", dbID)
+	containerName := fmt.Sprintf("yap-db-%s", name)
+	volumeName := fmt.Sprintf("yap-vol-%s", dbID)
 
 	if password == "" {
 		var err error
@@ -85,12 +85,12 @@ func (p *PostgresProvisioner) Provision(name string, password string, vpc string
 			fmt.Sprintf("POSTGRES_DB=%s", postgresDB),
 		},
 		Labels: map[string]string{
-			"nap.managed": "true",
-			"nap.type":    "database",
-			"nap.db.type": "postgres",
-			"nap.db.name": name,
-			"nap.db.id":   dbID,
-			"nap.vpc":     vpc,
+			"yap.managed": "true",
+			"yap.type":    "database",
+			"yap.db.type": "postgres",
+			"yap.db.name": name,
+			"yap.db.id":   dbID,
+			"yap.vpc":     vpc,
 		},
 	}
 
@@ -143,7 +143,7 @@ func (p *PostgresProvisioner) Provision(name string, password string, vpc string
 		ConnectionString:          internalConnectionString,
 		PublishedConnectionString: "",
 
-		Network: vpc + ".nap-vpc-network",
+		Network: vpc + ".yap-vpc-network",
 		Port:    0,
 		Host:    "",
 

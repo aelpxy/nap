@@ -150,7 +150,7 @@ func (c *Client) GetContainerLogs(containerID string, follow bool) (io.ReadClose
 	return logs, nil
 }
 
-func (c *Client) ListNapContainers() ([]types.Container, error) {
+func (c *Client) ListManagedContainers() ([]types.Container, error) {
 	allContainers, err := c.cli.ContainerList(c.ctx, container.ListOptions{
 		All: true,
 	})
@@ -158,14 +158,14 @@ func (c *Client) ListNapContainers() ([]types.Container, error) {
 		return nil, fmt.Errorf("failed to list containers: %w", err)
 	}
 
-	napContainers := []types.Container{}
+	managedContainers := []types.Container{}
 	for _, cont := range allContainers {
-		if managed, ok := cont.Labels["nap.managed"]; ok && managed == "true" {
-			napContainers = append(napContainers, cont)
+		if managed, ok := cont.Labels["yap.managed"]; ok && managed == "true" {
+			managedContainers = append(managedContainers, cont)
 		}
 	}
 
-	return napContainers, nil
+	return managedContainers, nil
 }
 
 func (c *Client) ContainerExists(containerID string) (bool, error) {

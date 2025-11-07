@@ -7,13 +7,13 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/aelpxy/nap/internal/utils"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/utils"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/lucsky/cuid"
 )
 
 const (
-	napDir       = ".nap"
+	yapDir       = ".yap"
 	registryFile = "databases.json"
 )
 
@@ -31,14 +31,14 @@ func NewRegistryManager() (*RegistryManager, error) {
 		return nil, fmt.Errorf("failed to get home directory: %w", err)
 	}
 
-	napPath := filepath.Join(homeDir, napDir)
+	yapPath := filepath.Join(homeDir, yapDir)
 
-	if err := os.MkdirAll(napPath, 0755); err != nil {
-		return nil, fmt.Errorf("failed to create nap directory: %w", err)
+	if err := os.MkdirAll(yapPath, 0755); err != nil {
+		return nil, fmt.Errorf("failed to create yap directory: %w", err)
 	}
 
 	return &RegistryManager{
-		path: filepath.Join(napPath, registryFile),
+		path: filepath.Join(yapPath, registryFile),
 	}, nil
 }
 

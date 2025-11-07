@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/runtime"
+	"github.com/aelpxy/yap/internal/runtime"
 	"github.com/docker/docker/client"
 )
 
 const (
-	NapNetwork       = "nap-net-internal"
-	NapNetworkSubnet = "172.20.0.0/16"
+	InternalNetwork       = "yap-net-internal"
+	InternalNetworkSubnet = "172.20.0.0/16"
 )
 
 type Client struct {

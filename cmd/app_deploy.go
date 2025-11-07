@@ -6,15 +6,15 @@ import (
 	"os"
 	"time"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/builder"
-	"github.com/aelpxy/nap/internal/constants"
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/project"
-	"github.com/aelpxy/nap/internal/router"
-	"github.com/aelpxy/nap/internal/utils"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/builder"
+	"github.com/aelpxy/yap/internal/constants"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/project"
+	"github.com/aelpxy/yap/internal/router"
+	"github.com/aelpxy/yap/internal/utils"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/spf13/cobra"
 )
 
@@ -118,12 +118,12 @@ func runAppDeploy(cmd *cobra.Command, args []string) {
 
 	project, err := project.LoadConfigIfExists(absPath)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s failed to load nap.toml: %v\n", errorStyle.Render("[error]"), err)
+		fmt.Fprintf(os.Stderr, "%s failed to load yap.toml: %v\n", errorStyle.Render("[error]"), err)
 		os.Exit(1)
 	}
 
 	if project != nil {
-		fmt.Println(infoStyle.Render("  [info] loaded configuration from nap.toml"))
+		fmt.Println(infoStyle.Render("  [info] loaded configuration from yap.toml"))
 
 		if project.App.Name != "" && !cmd.Flags().Changed("name") {
 			appName = project.App.Name
@@ -456,9 +456,9 @@ func runAppDeploy(cmd *cobra.Command, args []string) {
 	} else {
 		fmt.Println(progressStyle.Render("  --> registering application..."))
 
-		application.InternalHostname = fmt.Sprintf("nap-app-%s", appName)
+		application.InternalHostname = fmt.Sprintf("yap-app-%s", appName)
 		application.Published = false
-		application.PublishedURL = fmt.Sprintf("http://%s.nap.local", appName)
+		application.PublishedURL = fmt.Sprintf("http://%s.yap.local", appName)
 
 		deploymentRecord := models.DeploymentRecord{
 			ID:         fmt.Sprintf("dep-%s", time.Now().Format("20060102-150405")),
@@ -482,7 +482,7 @@ func runAppDeploy(cmd *cobra.Command, args []string) {
 	lockManager.Unlock(appName)
 
 	if project != nil && len(project.Volumes) > 0 && !isRedeployment {
-		fmt.Println(infoStyle.Render("  [info] adding volumes from nap.toml..."))
+		fmt.Println(infoStyle.Render("  [info] adding volumes from yap.toml..."))
 
 		volumeManager := app.NewVolumeManager(dockerClient, registry)
 		ctx := context.Background()
@@ -504,7 +504,7 @@ func runAppDeploy(cmd *cobra.Command, args []string) {
 		if len(project.Volumes) > 0 {
 			fmt.Println()
 			fmt.Println(infoStyle.Render("  [info] volumes added - redeploy to mount them"))
-			fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'nap app deploy %s' to mount volumes", appName)))
+			fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'yap app deploy %s' to mount volumes", appName)))
 			fmt.Println()
 		}
 	}
@@ -521,43 +521,43 @@ func runAppDeploy(cmd *cobra.Command, args []string) {
 	fmt.Printf("    strategy: %s\n", valueStyle.Render(string(strategy)))
 	fmt.Println()
 	fmt.Println(titleStyle.Render("  access:"))
-	fmt.Printf("    url: %s\n", valueStyle.Render(fmt.Sprintf("http://%s.nap.local", appName)))
-	fmt.Printf("    internal: %s\n", dimStyle.Render(fmt.Sprintf("nap-app-%s:%d", appName, port)))
+	fmt.Printf("    url: %s\n", valueStyle.Render(fmt.Sprintf("http://%s.yap.local", appName)))
+	fmt.Printf("    internal: %s\n", dimStyle.Render(fmt.Sprintf("yap-app-%s:%d", appName, port)))
 	fmt.Println()
 	fmt.Println(titleStyle.Render("  next steps:"))
 	fmt.Println()
 	fmt.Println("  " + dimStyle.Render("test your app:"))
-	fmt.Println("  " + infoStyle.Render(fmt.Sprintf("    curl -H \"Host: %s.nap.local\" http://localhost", appName)))
+	fmt.Println("  " + infoStyle.Render(fmt.Sprintf("    curl -H \"Host: %s.yap.local\" http://localhost", appName)))
 	fmt.Println()
 	fmt.Println("  " + dimStyle.Render("monitor and debug:"))
-	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    nap app logs %s [-f]", appName)))
-	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    nap app status %s", appName)))
+	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    yap app logs %s [-f]", appName)))
+	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    yap app status %s", appName)))
 	fmt.Println()
 	fmt.Println("  " + dimStyle.Render("scale your app:"))
-	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    nap app scale %s --instances 3", appName)))
+	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    yap app scale %s --instances 3", appName)))
 	fmt.Println()
 	fmt.Println("  " + dimStyle.Render("add environment variables:"))
-	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    nap app env set %s KEY=value", appName)))
-	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    nap app env import %s .env", appName)))
+	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    yap app env set %s KEY=value", appName)))
+	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    yap app env import %s .env", appName)))
 	fmt.Println()
 	fmt.Println("  " + dimStyle.Render("link a database:"))
-	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    nap db create postgres mydb --vpc %s", deployVPC)))
-	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    nap app link %s mydb", appName)))
+	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    yap db create postgres mydb --vpc %s", deployVPC)))
+	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    yap app link %s mydb", appName)))
 	fmt.Println()
 	fmt.Println("  " + dimStyle.Render("add persistent storage:"))
-	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    nap app volume add %s data /app/data", appName)))
-	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    nap app deploy %s   # redeploy to mount volume", appName)))
+	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    yap app volume add %s data /app/data", appName)))
+	fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    yap app deploy %s   # redeploy to mount volume", appName)))
 
 	if !application.Published {
 		fmt.Println()
 		fmt.Println("  " + dimStyle.Render("publish with https:"))
-		fmt.Println("  " + dimStyle.Render("    nap config setup"))
-		fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    nap app publish %s", appName)))
+		fmt.Println("  " + dimStyle.Render("    yap config setup"))
+		fmt.Println("  " + dimStyle.Render(fmt.Sprintf("    yap app publish %s", appName)))
 	}
 
 	if strategy == models.DeploymentStrategyBlueGreen && !deployAutoConfirm {
 		fmt.Println()
 		fmt.Println(labelStyle.Render("  blue-green deployment:"))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("    nap app deployment status %s   # view deployment state", appName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("    yap app deployment status %s   # view deployment state", appName)))
 	}
 }

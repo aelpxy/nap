@@ -5,9 +5,9 @@ import (
 	"net"
 	"os"
 
-	"github.com/aelpxy/nap/internal/database"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/internal/database"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/pkg/models"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +26,7 @@ func runPublish(cmd *cobra.Command, args []string) {
 
 	if publishPort == 0 {
 		fmt.Fprintln(os.Stderr, errorStyle.Render("[error] --port flag is required"))
-		fmt.Fprintln(os.Stderr, dimStyle.Render("example: nap db publish mydb --port 5432"))
+		fmt.Fprintln(os.Stderr, dimStyle.Render("example: yap db publish mydb --port 5432"))
 		os.Exit(1)
 	}
 
@@ -49,7 +49,7 @@ func runPublish(cmd *cobra.Command, args []string) {
 
 	if db.Published {
 		fmt.Fprintln(os.Stderr, errorStyle.Render(fmt.Sprintf("[error] database %s is already published on port %d", dbName, db.PublishedPort)))
-		fmt.Fprintln(os.Stderr, dimStyle.Render(fmt.Sprintf(" use 'nap db unpublish %s' first if you want to change the port", dbName)))
+		fmt.Fprintln(os.Stderr, dimStyle.Render(fmt.Sprintf(" use 'yap db unpublish %s' first if you want to change the port", dbName)))
 		os.Exit(1)
 	}
 
@@ -179,12 +179,12 @@ func recreateContainerWithPort(dockerClient *docker.Client, db *models.Database,
 	}
 
 	labels := map[string]string{
-		"nap.managed": "true",
-		"nap.type":    "database",
-		"nap.db.type": string(db.Type),
-		"nap.db.name": db.Name,
-		"nap.db.id":   db.ID,
-		"nap.vpc":     db.VPC,
+		"yap.managed": "true",
+		"yap.type":    "database",
+		"yap.db.type": string(db.Type),
+		"yap.db.name": db.Name,
+		"yap.db.id":   db.ID,
+		"yap.vpc":     db.VPC,
 	}
 
 	var image string

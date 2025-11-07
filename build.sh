@@ -23,7 +23,7 @@ for platform in "${platforms[@]}"; do
   GOOS="${PARTS[0]}"
   GOARCH="${PARTS[1]}"
 
-  output_name="nap-${VERSION}-${GOOS}-${GOARCH}"
+  output_name="yap-${VERSION}-${GOOS}-${GOARCH}"
   if [ "$GOOS" = "windows" ]; then
     output_name+=".exe"
   fi

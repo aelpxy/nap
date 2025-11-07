@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/app"
-	"github.com/aelpxy/nap/internal/docker"
-	"github.com/aelpxy/nap/internal/utils"
+	"github.com/aelpxy/yap/internal/app"
+	"github.com/aelpxy/yap/internal/docker"
+	"github.com/aelpxy/yap/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -24,9 +24,9 @@ var appVolumeBackupCmd = &cobra.Command{
 The backup is stored as a compressed tarball (.tar.gz) and can be restored later.
 
 Examples:
-  nap app volume backup myapp uploads
-  nap app volume backup myapp data --description "pre-deployment"
-  nap app volume backup myapp uploads --output /backups/uploads.tar.gz`,
+  yap app volume backup myapp uploads
+  yap app volume backup myapp data --description "pre-deployment"
+  yap app volume backup myapp uploads --output /backups/uploads.tar.gz`,
 	Args: cobra.ExactArgs(2),
 	Run:  runAppVolumeBackup,
 }
@@ -39,8 +39,8 @@ var appVolumeRestoreCmd = &cobra.Command{
 WARNING: This will replace all data in the volume with the backup data.
 
 Examples:
-  nap app volume restore myapp uploads backup-20251101-001234.tar.gz
-  nap app volume restore myapp data /path/to/backup.tar.gz`,
+  yap app volume restore myapp uploads backup-20251101-001234.tar.gz
+  yap app volume restore myapp data /path/to/backup.tar.gz`,
 	Args: cobra.ExactArgs(3),
 	Run:  runAppVolumeRestore,
 }
@@ -51,9 +51,9 @@ var appVolumeBackupsCmd = &cobra.Command{
 	Long: `List all volume backups or filter by app/volume.
 
 Examples:
-  nap app volume backups              # list all backups
-  nap app volume backups myapp        # list backups for app
-  nap app volume backups myapp data   # list backups for specific volume`,
+  yap app volume backups              # list all backups
+  yap app volume backups myapp        # list backups for app
+  yap app volume backups myapp data   # list backups for specific volume`,
 	Args: cobra.MaximumNArgs(2),
 	Run:  runAppVolumeBackups,
 }
@@ -72,7 +72,7 @@ func init() {
 	appVolumeCmd.AddCommand(appVolumeBackupDeleteCmd)
 
 	appVolumeBackupCmd.Flags().StringVar(&volumeBackupDescription, "description", "", "Backup description")
-	appVolumeBackupCmd.Flags().StringVar(&volumeBackupOutput, "output", "", "Output file path (default: ~/.nap/volume-backups/)")
+	appVolumeBackupCmd.Flags().StringVar(&volumeBackupOutput, "output", "", "Output file path (default: ~/.yap/volume-backups/)")
 }
 
 func runAppVolumeBackup(cmd *cobra.Command, args []string) {
@@ -222,7 +222,7 @@ func runAppVolumeRestore(cmd *cobra.Command, args []string) {
 	fmt.Println()
 
 	fmt.Println(infoStyle.Render("  [info] restart app to use restored data"))
-	fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'nap app restart %s' to restart", appName)))
+	fmt.Println(dimStyle.Render(fmt.Sprintf("  run 'yap app restart %s' to restart", appName)))
 }
 
 func runAppVolumeBackups(cmd *cobra.Command, args []string) {

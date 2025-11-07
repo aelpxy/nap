@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/aelpxy/nap/pkg/models"
+	"github.com/aelpxy/yap/pkg/models"
 )
 
 const (
@@ -26,8 +26,8 @@ func NewVPCRegistryManager() (*VPCRegistryManager, error) {
 		return nil, fmt.Errorf("failed to get home directory: %w", err)
 	}
 
-	napDir := filepath.Join(homeDir, ".nap")
-	registryPath := filepath.Join(napDir, vpcRegistryFile)
+	yapDir := filepath.Join(homeDir, ".yap")
+	registryPath := filepath.Join(yapDir, vpcRegistryFile)
 
 	return &VPCRegistryManager{
 		registryPath: registryPath,

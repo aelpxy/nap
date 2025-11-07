@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/database"
+	"github.com/aelpxy/yap/internal/database"
 	"github.com/spf13/cobra"
 )
 
@@ -45,7 +45,7 @@ func runDbApps(cmd *cobra.Command, args []string) {
 	if len(db.LinkedApps) == 0 {
 		fmt.Println(dimStyle.Render("  no applications linked"))
 		fmt.Println()
-		fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'nap app link <app-name> %s' to link an application", dbName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("  use 'yap app link <app-name> %s' to link an application", dbName)))
 		return
 	}
 

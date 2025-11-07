@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aelpxy/nap/internal/database"
+	"github.com/aelpxy/yap/internal/database"
 	"github.com/spf13/cobra"
 )
 
@@ -81,7 +81,7 @@ func runCredentials(cmd *cobra.Command, args []string) {
 		fmt.Println()
 	} else {
 		fmt.Println(dimStyle.Render("  [info] this database is not published to the host"))
-		fmt.Println(dimStyle.Render(fmt.Sprintf("  [info] run 'nap db publish %s --port <port>' to access from your machine", dbName)))
+		fmt.Println(dimStyle.Render(fmt.Sprintf("  [info] run 'yap db publish %s --port <port>' to access from your machine", dbName)))
 		fmt.Println()
 	}
 }

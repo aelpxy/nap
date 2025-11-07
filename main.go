@@ -1,6 +1,6 @@
 package main
 
-import "github.com/aelpxy/nap/cmd"
+import "github.com/aelpxy/yap/cmd"
 
 var (
 	Version   = "alpha"
